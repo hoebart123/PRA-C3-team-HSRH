@@ -1,5 +1,17 @@
 # Changelog
 
+## 3.30.2 - 2025-11-10
+
+### Fixes
+
+- [Local] Clear last error for rename and copy operations (#1883) 
+
+## 3.30.1 - 2025-10-20
+
+### Fixes
+
+- Ensure listing directories called "0" do not produce unfiltered listings.
+
 ## 3.30.0 - 2025-06-25
 
 ### Changes

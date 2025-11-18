@@ -277,13 +277,13 @@ trait ValidatesAttributes
      * Get the date timestamp.
      *
      * @param  mixed  $value
-     * @return int|null
+     * @return int
      */
     protected function getDateTimestamp($value)
     {
         $date = is_null($value) ? null : $this->getDateTime($value);
 
-        return $date?->getTimestamp();
+        return $date ? $date->getTimestamp() : null;
     }
 
     /**
@@ -721,9 +721,8 @@ trait ValidatesAttributes
     {
         $this->requireParameterCount(1, $parameters, 'digits');
 
-        return (is_numeric($value) || is_string($value)) &&
-            ! preg_match('/[^0-9]/', $value) &&
-            strlen((string) $value) == $parameters[0];
+        return ! preg_match('/[^0-9]/', $value)
+                    && strlen((string) $value) == $parameters[0];
     }
 
     /**
@@ -1554,10 +1553,10 @@ trait ValidatesAttributes
      *
      * @param  string  $attribute
      * @param  mixed  $value
-     * @param  array{0?: 'strict'}  $parameters
+     * @param  array{0: 'strict'}  $parameters
      * @return bool
      */
-    public function validateInteger($attribute, $value, array $parameters = [])
+    public function validateInteger($attribute, $value, array $parameters)
     {
         if (($parameters[0] ?? null) === 'strict') {
             return is_int($value);

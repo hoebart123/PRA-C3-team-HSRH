@@ -111,7 +111,7 @@ class NotificationSender
             }
 
             $this->withLocale($this->preferredLocale($notifiable, $notification), function () use ($viaChannels, $notifiable, $original) {
-                $notificationId = (string) Str::uuid();
+                $notificationId = Str::uuid()->toString();
 
                 foreach ((array) $viaChannels as $channel) {
                     if (! ($notifiable instanceof AnonymousNotifiable && $channel === 'database')) {
@@ -216,7 +216,7 @@ class NotificationSender
         $original = clone $notification;
 
         foreach ($notifiables as $notifiable) {
-            $notificationId = (string) Str::uuid();
+            $notificationId = Str::uuid()->toString();
 
             foreach ((array) $original->via($notifiable) as $channel) {
                 $notification = clone $original;
@@ -232,31 +232,19 @@ class NotificationSender
                 $connection = $notification->connection;
 
                 if (method_exists($notification, 'viaConnections')) {
-                    $connection = $notification->viaConnections()[$channel] ?? $connection;
+                    $connection = $notification->viaConnections()[$channel] ?? null;
                 }
 
                 $queue = $notification->queue;
 
                 if (method_exists($notification, 'viaQueues')) {
-                    $queue = $notification->viaQueues()[$channel] ?? $queue;
+                    $queue = $notification->viaQueues()[$channel] ?? null;
                 }
 
                 $delay = $notification->delay;
 
                 if (method_exists($notification, 'withDelay')) {
                     $delay = $notification->withDelay($notifiable, $channel) ?? null;
-                }
-
-                $messageGroup = $notification->messageGroup ?? (method_exists($notification, 'messageGroup') ? $notification->messageGroup() : null);
-
-                if (method_exists($notification, 'withMessageGroups')) {
-                    $messageGroup = $notification->withMessageGroups($notifiable, $channel) ?? null;
-                }
-
-                $deduplicator = $notification->deduplicator ?? (method_exists($notification, 'deduplicationId') ? $notification->deduplicationId(...) : null);
-
-                if (method_exists($notification, 'withDeduplicators')) {
-                    $deduplicator = $notification->withDeduplicators($notifiable, $channel) ?? null;
                 }
 
                 $middleware = $notification->middleware ?? [];
@@ -277,8 +265,6 @@ class NotificationSender
                         ->onConnection($connection)
                         ->onQueue($queue)
                         ->delay(is_array($delay) ? ($delay[$channel] ?? null) : $delay)
-                        ->onGroup(is_array($messageGroup) ? ($messageGroup[$channel] ?? null) : $messageGroup)
-                        ->withDeduplicator(is_array($deduplicator) ? ($deduplicator[$channel] ?? null) : $deduplicator)
                         ->through($middleware)
                 );
             }

@@ -340,11 +340,11 @@ trait EnumeratesValues
      */
     public function value($key, $default = null)
     {
-        $value = $this->first(function ($target) use ($key) {
-            return data_has($target, $key);
-        });
+        if ($value = $this->firstWhere($key)) {
+            return data_get($value, $key, $default);
+        }
 
-        return data_get($value, $key, $default);
+        return value($default);
     }
 
     /**
@@ -961,12 +961,15 @@ trait EnumeratesValues
     public function jsonSerialize(): array
     {
         return array_map(function ($value) {
-            return match (true) {
-                $value instanceof JsonSerializable => $value->jsonSerialize(),
-                $value instanceof Jsonable => json_decode($value->toJson(), true),
-                $value instanceof Arrayable => $value->toArray(),
-                default => $value,
-            };
+            if ($value instanceof JsonSerializable) {
+                return $value->jsonSerialize();
+            } elseif ($value instanceof Jsonable) {
+                return json_decode($value->toJson(), true);
+            } elseif ($value instanceof Arrayable) {
+                return $value->toArray();
+            }
+
+            return $value;
         }, $this->all());
     }
 

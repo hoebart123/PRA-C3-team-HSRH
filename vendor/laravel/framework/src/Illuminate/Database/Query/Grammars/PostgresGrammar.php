@@ -618,7 +618,6 @@ class PostgresGrammar extends Grammar
      * @param  array  $values
      * @return array
      */
-    #[\Override]
     public function prepareBindingsForUpdate(array $bindings, array $values)
     {
         $values = (new Collection($values))->map(function ($value, $column) {
@@ -628,8 +627,6 @@ class PostgresGrammar extends Grammar
         })->all();
 
         $cleanBindings = Arr::except($bindings, 'select');
-
-        $values = Arr::flatten(array_map(fn ($value) => value($value), $values));
 
         return array_values(
             array_merge($values, Arr::flatten($cleanBindings))

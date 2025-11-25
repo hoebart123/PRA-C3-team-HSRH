@@ -6,6 +6,7 @@
     <title>Homepage</title>
 </head>
 <body>
-    
+    <h1>Welkom op de homepage</h1>
+    <p>Ga naar onze <a href="{{ route('contact') }}">Contactpagina</a></p>
 </body>
 </html>

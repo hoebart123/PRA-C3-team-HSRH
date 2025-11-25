@@ -11,7 +11,6 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
-use GuzzleHttp\Promise\EachPromise;
 use GuzzleHttp\UriTemplate\UriTemplate;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Client\Events\ConnectionFailed;
@@ -529,7 +528,7 @@ class PendingRequest
     public function withUrlParameters(array $parameters = [])
     {
         return tap($this, function () use ($parameters) {
-            $this->urlParameters = array_merge($this->urlParameters, $parameters);
+            $this->urlParameters = $parameters;
         });
     }
 
@@ -885,51 +884,19 @@ class PendingRequest
      * Send a pool of asynchronous requests concurrently.
      *
      * @param  callable  $callback
-     * @param  int|null  $concurrency
      * @return array<array-key, \Illuminate\Http\Client\Response>
      */
-    public function pool(callable $callback, ?int $concurrency = null)
+    public function pool(callable $callback)
     {
         $results = [];
 
         $requests = tap(new Pool($this->factory), $callback)->getRequests();
 
-        if ($concurrency === null) {
-            foreach ($requests as $key => $item) {
-                $results[$key] = $item instanceof static ? $item->getPromise()->wait() : $item->wait();
-            }
-
-            return $results;
-        }
-
-        $promises = [];
-
         foreach ($requests as $key => $item) {
-            $promises[$key] = $item instanceof static ? $item->getPromise() : $item;
+            $results[$key] = $item instanceof static ? $item->getPromise()->wait() : $item->wait();
         }
-
-        (new EachPromise($promises, [
-            'fulfilled' => function ($result, $key) use (&$results) {
-                $results[$key] = $result;
-            },
-            'rejected' => function ($reason, $key) use (&$results) {
-                $results[$key] = $reason;
-            },
-            'concurrency' => $concurrency,
-        ]))->promise()->wait();
 
         return $results;
-    }
-
-    /**
-     * Send a pool of asynchronous requests concurrently, with callbacks for introspection.
-     *
-     * @param  callable  $callback
-     * @return \Illuminate\Http\Client\Batch
-     */
-    public function batch(callable $callback): Batch
-    {
-        return tap(new Batch($this->factory), $callback);
     }
 
     /**

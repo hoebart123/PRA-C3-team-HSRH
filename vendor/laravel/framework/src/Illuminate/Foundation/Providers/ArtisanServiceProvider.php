@@ -409,7 +409,7 @@ class ArtisanServiceProvider extends ServiceProvider implements DeferrableProvid
      */
     protected function registerConfigPublishCommand()
     {
-        $this->app->singleton(ConfigPublishCommand::class, function () {
+        $this->app->singleton(ConfigPublishCommand::class, function ($app) {
             return new ConfigPublishCommand;
         });
     }

@@ -107,10 +107,10 @@
                 </div>
                 <x-laravel-exceptions-renderer::syntax-highlight
                     :code="$sql"
-                    language="sql"
+                    grammar="sql"
                     truncate
                     class="min-w-0"
-                    data-tippy-content="{{ nl2br($sql) }}"
+                    data-tippy-content="{{ $sql }}"
                 />
             </div>
             <div class="text-neutral-500 dark:text-neutral-200 text-right flex-shrink-0">{{ $time }}ms</div>

@@ -268,12 +268,12 @@ class Dispatcher implements DispatcherContract
         // When the given "event" is actually an object we will assume it is an event
         // object and use the class as the event name and this event itself as the
         // payload to the handler, which makes object based events quite simple.
-        [$isEventObject, $parsedEvent, $parsedPayload] = [
+        [$isEventObject, $event, $payload] = [
             is_object($event),
             ...$this->parseEventAndPayload($event, $payload),
         ];
 
-        if ($this->shouldDeferEvent($parsedEvent)) {
+        if ($this->shouldDeferEvent($event)) {
             $this->deferredEvents[] = func_get_args();
 
             return null;
@@ -283,16 +283,16 @@ class Dispatcher implements DispatcherContract
         // transaction is successful, we'll register a callback which will handle
         // dispatching this event on the next successful DB transaction commit.
         if ($isEventObject &&
-            $parsedPayload[0] instanceof ShouldDispatchAfterCommit &&
+            $payload[0] instanceof ShouldDispatchAfterCommit &&
             ! is_null($transactions = $this->resolveTransactionManager())) {
             $transactions->addCallback(
-                fn () => $this->invokeListeners($parsedEvent, $parsedPayload, $halt)
+                fn () => $this->invokeListeners($event, $payload, $halt)
             );
 
             return null;
         }
 
-        return $this->invokeListeners($parsedEvent, $parsedPayload, $halt);
+        return $this->invokeListeners($event, $payload, $halt);
     }
 
     /**
@@ -706,11 +706,6 @@ class Dispatcher implements DispatcherContract
             $job->timeout = $listener->timeout ?? null;
             $job->failOnTimeout = $listener->failOnTimeout ?? false;
             $job->tries = method_exists($listener, 'tries') ? $listener->tries(...$data) : ($listener->tries ?? null);
-            $job->messageGroup = method_exists($listener, 'messageGroup') ? $listener->messageGroup(...$data) : ($listener->messageGroup ?? null);
-            $job->withDeduplicator(method_exists($listener, 'deduplicator')
-                ? $listener->deduplicator(...$data)
-                : (method_exists($listener, 'deduplicationId') ? $listener->deduplicationId(...) : null)
-            );
 
             $job->through(array_merge(
                 method_exists($listener, 'middleware') ? $listener->middleware(...$data) : [],

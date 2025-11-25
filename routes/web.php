@@ -18,3 +18,20 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+Route::get('/', function () {
+    return view('home');
+})->name('home');
+
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
+Route::get('/manage', function () {
+    return view('manage');
+})->name('manage');
+Route::post('/contact', function (Request $request) {
+    $data = $request->only('name', 'email', 'message');
+    Message::create($data);
+
+    return redirect()->route('contact')->with('success', 'Bericht verstuurd!');
+})->name('contact.send');

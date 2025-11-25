@@ -21,7 +21,7 @@ require __DIR__.'/auth.php';
 
 Route::get('/', function () {
     return view('home');
-})->name('home');
+})->name('home')->middleware('auth');
 
 Route::get('/contact', function () {
     return view('contact');

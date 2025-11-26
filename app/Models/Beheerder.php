@@ -3,17 +3,30 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class Beheerder extends Model
+class Beheerder extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\BeheerderFactory> */
-    use HasFactory;
+    use HasFactory, Notifiable;
+
+    protected $table = 'beheerders';
 
     protected $fillable = [
         'naam',
         'school',
         'email',
-        'wachtwoord',
+        'password',
+        'is_active',
+        'is_super',
+    ];
+
+    protected $hidden = [
+        'password',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+        'is_super' => 'boolean',
     ];
 }

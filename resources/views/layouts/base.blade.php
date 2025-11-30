@@ -13,9 +13,9 @@
 <header>
     <nav>
         <a href="{{ route('home') }}">Home</a>
-        <a href="{{ route('toernooi') }}">Toernooi</a>
+        {{-- <a href="{{ route('toernooi') }}">Toernooi</a>
         <a href="{{ route('regel') }}">Regels</a>
-        <a href="{{ route('beheerder') }}">Beheerders Pagina</a>
+        <a href="{{ route('beheerder') }}">Beheerders Pagina</a> (dit gaf een error)--}}
         <a href="{{ route('contact') }}">Contact</a>
 
         @guest

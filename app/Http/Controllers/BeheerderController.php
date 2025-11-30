@@ -22,34 +22,38 @@ class BeheerderController extends Controller
 
         return view('beheerders.index', ['beheerders' => $beheerders]);
     }
+    
+    public function showRegistrationForm()
+    {
+        return view('beheerders.register');
+    }
 
     public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'naam' => 'required|string',
-            'school' => 'nullable|string',
-            'email' => 'required|email|unique:beheerders,email',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
+{
+    $validated = $request->validate([
+        'naam' => 'required|string',
+        'school' => 'nullable|string',
+        'email' => 'required|email|unique:beheerders,email',
+        'password' => 'required|string|min:8|confirmed',
+    ]);
 
-        $beheerder = Beheerder::create([
-            'naam' => $validated['naam'],
-            'school' => $validated['school'] ?? null,
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'is_active' => false,
-            'is_super' => false,
-        ]);
+    $beheerder = Beheerder::create([
+        'naam' => $validated['naam'],
+        'school' => $validated['school'] ?? null,
+        'email' => $validated['email'],
+        'password' => Hash::make($validated['password']),
+        'is_active' => false, 
+        'is_super' => false,
+    ]);
 
-        // Stuur een notificatie naar alle actieve beheerders
-        $actieveBeheerders = Beheerder::where('is_active', true)->get();
-        foreach ($actieveBeheerders as $admin) {
-            Mail::to($admin->email)->send(new BeheerderPendingApproval($beheerder));
-        }
-
-        return redirect()->route('beheerders.index')
-            ->with('success', 'Nieuwe beheerder is aangemaakt en wacht op goedkeuring.');
+    $actieveBeheerders = Beheerder::where('is_active', true)->get();
+    foreach ($actieveBeheerders as $admin) {
+        Mail::to($admin->email)->send(new BeheerderPendingApproval($beheerder));
     }
+
+    return redirect()->route('beheerders.index')
+        ->with('success', 'Nieuwe beheerder is aangemaakt en wacht op goedkeuring.');
+}
 
     public function approve(Beheerder $beheerder)
     {

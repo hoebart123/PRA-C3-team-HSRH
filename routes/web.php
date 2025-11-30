@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\BeheerderController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use App\Models\Message;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\BeheerderController;
+use App\Http\Controllers\BeheerderLoginController;
 
 Route::get('/', function () {
     return view('home');
@@ -22,16 +23,29 @@ Route::post('/contact', function (Request $request) {
     return redirect()->route('contact')->with('success', 'Bericht verstuurd!');
 })->name('contact.send');
 
+Route::post('/inschrijven/scholen', [RegistrationController::class, 'store'])->name('registrations.store');
+
+Route::prefix('beheerder')->group(function () {
+    // Login/Logout
+    Route::get('login', [BeheerderLoginController::class, 'showLoginForm'])->name('beheerder.login');
+    Route::post('login', [BeheerderLoginController::class, 'login'])->name('beheerder.login.submit');
+    Route::post('logout', [BeheerderLoginController::class, 'logout'])->name('beheerder.logout');
+
+    // Beschermde beheerder routes
+    Route::middleware('auth:beheerder')->group(function () {
+        Route::get('dashboard', [BeheerderController::class, 'index'])->name('beheerders.index');
+        Route::get('beheerder/register', [BeheerderController::class, 'showRegistrationForm'])->name('beheerder.register');
+        Route::post('beheerder/register', [BeheerderController::class, 'store'])->name('beheerder.register.submit');
+        Route::post('/', [BeheerderController::class, 'store'])->name('beheerders.store');
+        Route::post('{beheerder}/approve', [BeheerderController::class, 'approve'])->name('beheerders.approve');
+        Route::delete('{beheerder}', [BeheerderController::class, 'destroy'])->name('beheerders.destroy');
+    });
+});
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/beheerders', [BeheerderController::class, 'index'])->name('beheerders.index');
-    Route::post('/beheerders', [BeheerderController::class, 'store'])->name('beheerders.store');
-    Route::post('/beheerders/{beheerder}/approve', [BeheerderController::class, 'approve'])->name('beheerders.approve');
-    Route::delete('/beheerders/{beheerder}', [BeheerderController::class, 'destroy'])->name('beheerders.destroy');
 });
-
-Route::post('/inschrijven/scholen', [RegistrationController::class, 'store'])->name('registrations.store');
 
 require __DIR__.'/auth.php';

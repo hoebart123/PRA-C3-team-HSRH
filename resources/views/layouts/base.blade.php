@@ -12,24 +12,29 @@
 <body>
 <header>
     <nav>
-        <a href="{{ route('home') }}">Home</a>
-        {{-- <a href="{{ route('toernooi') }}">Toernooi</a>
-        <a href="{{ route('regel') }}">Regels</a>
-        <a href="{{ route('beheerder') }}">Beheerders Pagina</a> (dit gaf een error)--}}
-        <a href="{{ route('contact') }}">Contact</a>
+    <a href="{{ route('home') }}">Home</a>
+    {{-- <a href="{{ route('toernooi') }}">Toernooi</a>
+    <a href="{{ route('regel') }}">Regels</a> --}}
+    <a href="{{ route('contact') }}">Contact</a>
 
-        @guest
-            <a href="{{ route('login') }}">Log in</a>
-            <a href="{{ route('register') }}">Registreer</a>
-        @endguest
+    @guest
+        <a href="{{ route('login') }}">Log in</a>
+        <a href="{{ route('register') }}">Registreer</a>
+        <a href="{{ route('beheerder.login') }}">Beheerder Login</a>
+        <a href="{{ route('beheerder.register') }}">Beheerder registreren</a>
+    @endguest
 
-        @auth
-        <form method="POST" action="{{ route('logout') }}">
+    @auth
+        @if(auth()->user() instanceof \App\Models\Beheerder)
+            <a href="{{ route('beheerders.index') }}">Beheerder Dashboard</a>
+        @endif
+
+        <form method="POST" action="{{ route('logout') }}" style="display:inline;">
             @csrf
             <a href="#" onclick="event.preventDefault(); this.closest('form').submit();">Log uit</a>
         </form>
-        @endauth
-    </nav>
+    @endauth
+</nav>
 </header>
 
 <main>

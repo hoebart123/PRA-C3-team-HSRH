@@ -16,7 +16,6 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        // Gate: alleen superbeheerder (is_super) mag verwijderen
         Gate::define('delete-beheerder', function (?Beheerder $user) {
             return $user && $user->is_super;
         });

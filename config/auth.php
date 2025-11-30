@@ -40,6 +40,11 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+    
+        'beheerder' => [
+        'driver' => 'session',
+        'provider' => 'beheerders',
+    ],
     ],
 
     /*
@@ -69,6 +74,11 @@ return [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
+
+        'beheerders' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Beheerder::class,
+        ],
     ],
 
     /*

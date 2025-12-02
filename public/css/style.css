@@ -7,6 +7,18 @@ body {
     padding: 0;
 }
 
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4B0082;
+    color: white;
+    border-radius: 5px;
+}
+
+.button:hover {
+    background-color: #5e00b3;
+}
+
 /* Header */
 header {
     background-color: #4B0082; /* donkerpaars */
@@ -109,4 +121,32 @@ footer {
     background-color: #e0e0e0; /* lichtgrijs */
     color: #333;
     margin-top: 40px;
+}
+
+body main {
+    padding: 20px;
+    max-width: 600px;
+    margin: auto;
+}
+
+h1 {
+    text-align: center;
+}
+
+p {
+    margin-bottom: 20px;
+}
+
+@media (max-width: 400px) {
+    .button,
+    .contact-form button {
+        margin-bottom: 12px;
+        text-align: center;
+    }
+
+    header nav a {
+        display: block;
+        margin-left: 0;
+        margin-top: 8px;
+    }
 }

@@ -24,8 +24,6 @@
     @guest
         <a href="{{ route('login') }}">Log in</a>
         <a href="{{ route('register') }}">Registreer</a>
-        <a href="{{ route('beheerder.login') }}">Beheerder Login</a>
-        <a href="{{ route('beheerder.register') }}">Beheerder registreren</a>
     @endguest
 
    @auth

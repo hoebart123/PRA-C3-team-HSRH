@@ -34,7 +34,7 @@
     @endif
 
 
-    <a href="{{ route('logout') }}" class="logout-link"
+    <a href="{{ route('logout') }}" "
        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
        Log uit
     </a>

@@ -167,3 +167,39 @@ p {
 .logout-link:hover {
     background-color: #6A0DAD;
 }
+/* Uitschrijven knop als klein rond kruisje */
+.remove-team {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background-color: #ff4d4f; /* rood */
+    color: #fff;
+    border: none;
+    padding: 3px 7px;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 0.8em;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.remove-team:hover {
+    background-color: #e03e3e;
+    transform: scale(1.2);
+}
+
+/* Team blokjes eenvoudiger */
+.team-block {
+    padding: 0; /* verwijder extra achtergrond/vak */
+    margin-bottom: 15px;
+    position: relative;
+    border: none; /* geen rand */
+}
+.team-block label,
+.team-block input,
+.team-block select {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+}
+

@@ -12,8 +12,12 @@ body {
     padding: 0;
 }
 
+h1, h2 {
+    text-align: center;
+}
+
 /* Formulier */
-form {
+form#inschrijfForm {
     background-color: #fff;
     padding: 25px;
     border-radius: 8px;
@@ -21,16 +25,16 @@ form {
     margin-bottom: 30px;
 }
 
-form label {
+form#inschrijfForm label {
     font-weight: bold;
     display: block;
     margin-top: 15px;
     color: #4B0082;
 }
 
-form input,
-form textarea,
-form select {
+form#inschrijfForm input,
+form#inschrijfForm textarea,
+form#inschrijfForm select {
     width: 100%;
     padding: 10px;
     margin-top: 5px;
@@ -39,7 +43,7 @@ form select {
     resize: vertical;
 }
 
-form button {
+form#inschrijfForm button {
     margin-top: 20px;
     background-color: #4B0082;
     color: #fff;
@@ -51,7 +55,7 @@ form button {
     transition: background-color 0.3s ease;
 }
 
-form button:hover {
+form#inschrijfForm button:hover {
     background-color: #6A0DAD;
 }
 
@@ -64,7 +68,6 @@ form button:hover {
     position: relative;
 }
 
-/* Delete button voor teams */
 .remove-team {
     position: absolute;
     top: 10px;
@@ -72,10 +75,12 @@ form button:hover {
     background: #ff4d4f;
     color: #fff;
     border: none;
-    padding: 5px 10px;
+    padding: 5px 8px;
     border-radius: 50%;
     font-weight: bold;
     cursor: pointer;
+    font-size: 0.9em; /* compacte grootte */
+    line-height: 1;
 }
 
 .remove-team:hover {
@@ -108,10 +113,30 @@ form button:hover {
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    display: inline-block; /* geen vak eromheen */
 }
 
 .delete-btn:hover {
     background-color: #e03e3e;
+}
+
+/* Alerts */
+.alert {
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.alert.success {
+    background-color: #d1e7dd;
+    color: #0f5132;
+    border: 1px solid #badbcc;
+}
+
+.alert.error {
+    background-color: #f8d7da;
+    color: #842029;
+    border: 1px solid #f5c2c7;
 }
 </style>
 
@@ -187,7 +212,8 @@ form button:hover {
                         {{ $team->naam }} ({{ $team->sport }}) — {{ $team->aantal }} leerlingen <br>
                     @endforeach
                 </div>
-                <form action="{{ route('inschrijven.delete', $reg->id) }}" method="POST" style="margin-left: 20px;">
+                
+                <form action="{{ route('inschrijven.delete', $reg->id) }}" method="POST" style="margin:0;">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="delete-btn">Uitschrijven</button>

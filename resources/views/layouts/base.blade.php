@@ -16,6 +16,10 @@
     {{-- <a href="{{ route('toernooi') }}">Toernooi</a>
     <a href="{{ route('regel') }}">Regels</a> --}}
     <a href="{{ route('contact') }}">Contact</a>
+    <a href="#">Middelbare school</a>
+    <a href="#">Basisschool</a>
+    <a href="#">Info</a>
+
 
     @guest
         <a href="{{ route('login') }}">Log in</a>

@@ -7,6 +7,18 @@ body {
     padding: 0;
 }
 
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4B0082;
+    color: white;
+    border-radius: 5px;
+}
+
+.button:hover {
+    background-color: #5e00b3;
+}
+
 /* Header */
 header {
     background-color: #4B0082; /* donkerpaars */
@@ -110,33 +122,31 @@ footer {
     color: #333;
     margin-top: 40px;
 }
-header nav a.logout-link {
-    color: #fff;               /* wit zodat je hem ziet op donkere achtergrond */
-    text-decoration: none;
-    font-weight: bold;
-    background: none;           /* geen wit vakje */
-    padding: 0;                 /* geen extra ruimte */
-    border: none;               /* geen rand */
-    cursor: pointer;            /* laat zien dat hij klikbaar is */
-    position: relative;         /* voor z-index werking */
-    z-index: 10;                /* boven andere elementen */
+
+body main {
+    padding: 20px;
+    max-width: 600px;
+    margin: auto;
 }
 
-header nav a.logout-link:hover {
-    text-decoration: underline; /* subtiel hover-effect */
-}
-.btn-inschrijven {
-    display: inline-block;
-    background-color: #4B0082;
-    color: #fff;
-    padding: 12px 25px;
-    border-radius: 5px;
-    font-weight: bold;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
+h1 {
+    text-align: center;
 }
 
-.btn-inschrijven:hover {
-    background-color: #6A0DAD;
+p {
+    margin-bottom: 20px;
 }
 
+@media (max-width: 400px) {
+    .button,
+    .contact-form button {
+        margin-bottom: 12px;
+        text-align: center;
+    }
+
+    header nav a {
+        display: block;
+        margin-left: 0;
+        margin-top: 8px;
+    }
+}

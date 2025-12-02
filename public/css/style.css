@@ -110,3 +110,33 @@ footer {
     color: #333;
     margin-top: 40px;
 }
+header nav a.logout-link {
+    color: #fff;               /* wit zodat je hem ziet op donkere achtergrond */
+    text-decoration: none;
+    font-weight: bold;
+    background: none;           /* geen wit vakje */
+    padding: 0;                 /* geen extra ruimte */
+    border: none;               /* geen rand */
+    cursor: pointer;            /* laat zien dat hij klikbaar is */
+    position: relative;         /* voor z-index werking */
+    z-index: 10;                /* boven andere elementen */
+}
+
+header nav a.logout-link:hover {
+    text-decoration: underline; /* subtiel hover-effect */
+}
+.btn-inschrijven {
+    display: inline-block;
+    background-color: #4B0082;
+    color: #fff;
+    padding: 12px 25px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-inschrijven:hover {
+    background-color: #6A0DAD;
+}
+

@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    {{-- Gebruik asset() i.p.v. ../../../ --}}
+ 
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
     <title>{{ env('APP_NAME') }}</title>
@@ -19,6 +18,7 @@
     <a href="#">Middelbare school</a>
     <a href="#">Basisschool</a>
     <a href="#">Info</a>
+    <a href="{{ route('registrations.create') }}" ">Inschrijven</a>
 
 
     @guest
@@ -28,16 +28,22 @@
         <a href="{{ route('beheerder.register') }}">Beheerder registreren</a>
     @endguest
 
-    @auth
-        @if(auth()->user() instanceof \App\Models\Beheerder)
-            <a href="{{ route('beheerders.index') }}">Beheerder Dashboard</a>
-        @endif
+   @auth
+    @if(auth()->user() instanceof \App\Models\Beheerder)
+        <a href="{{ route('beheerders.index') }}">Beheerder Dashboard</a>
+    @endif
 
-        <form method="POST" action="{{ route('logout') }}" style="display:inline;">
-            @csrf
-            <a href="#" onclick="event.preventDefault(); this.closest('form').submit();">Log uit</a>
-        </form>
-    @endauth
+
+    <a href="{{ route('logout') }}" class="logout-link"
+       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+       Log uit
+    </a>
+
+    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
+        @csrf
+    </form>
+@endauth
+
 </nav>
 </header>
 

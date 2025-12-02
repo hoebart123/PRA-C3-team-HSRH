@@ -23,7 +23,7 @@ Route::post('/contact', function (Request $request) {
     return redirect()->route('contact')->with('success', 'Bericht verstuurd!');
 })->name('contact.send');
 
-Route::post('/inschrijven/scholen', [RegistrationController::class, 'store'])->name('registrations.store');
+
 
 Route::prefix('beheerder')->group(function () {
     // Login/Logout
@@ -47,5 +47,14 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+// Inschrijven
+Route::get('/inschrijven', [RegistrationController::class, 'index'])->name('inschrijven');
+Route::post('/inschrijven', [RegistrationController::class, 'store'])->name('registrations.store');
+Route::delete('/inschrijven/{id}', [RegistrationController::class, 'destroy'])->name('inschrijven.delete');
+
+Route::get('/inschrijven', [App\Http\Controllers\RegistrationController::class, 'create'])->name('registrations.create');
+Route::post('/inschrijven', [App\Http\Controllers\RegistrationController::class, 'store'])->name('registrations.store');
+
+
 
 require __DIR__.'/auth.php';

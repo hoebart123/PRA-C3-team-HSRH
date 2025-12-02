@@ -6,6 +6,10 @@
 
 <p>Wij organiseren voetbal- en lijnbaltoernooien voor leerlingen in Bergen op Zoom en omgeving.</p>
 
-<p><a href="#" class="button">Schrijf je in</a></p>
+<p>
+    <a href="{{ route('registrations.create') }}" class="btn-inschrijven">
+        Inschrijven
+    </a>
+</p>
 
 @endsection

@@ -34,8 +34,6 @@ Route::prefix('beheerder')->group(function () {
     // Beschermde beheerder routes
     Route::middleware('auth:beheerder')->group(function () {
         Route::get('dashboard', [BeheerderController::class, 'index'])->name('beheerders.index');
-        Route::get('beheerder/register', [BeheerderController::class, 'showRegistrationForm'])->name('beheerder.register');
-        Route::post('beheerder/register', [BeheerderController::class, 'store'])->name('beheerder.register.submit');
         Route::post('/', [BeheerderController::class, 'store'])->name('beheerders.store');
         Route::post('{beheerder}/approve', [BeheerderController::class, 'approve'])->name('beheerders.approve');
         Route::delete('{beheerder}', [BeheerderController::class, 'destroy'])->name('beheerders.destroy');
@@ -49,3 +47,9 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+Route::get('/beheerder/register', [BeheerderController::class, 'showRegistrationForm'])
+    ->name('beheerder.register');
+
+Route::post('/beheerder/register', [BeheerderController::class, 'store'])
+    ->name('beheerder.register.submit');

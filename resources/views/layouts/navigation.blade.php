@@ -15,7 +15,7 @@
                     <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
                         {{ __('home') }}
                     </x-nav-link>
-                </div>
+                </div
             </div>
 
             <!-- Settings Dropdown -->
@@ -98,3 +98,5 @@
         </div>
     </div>
 </nav>
+
+<a href="{{ route('beheerder.register') }}">Beheerder registreren</a>

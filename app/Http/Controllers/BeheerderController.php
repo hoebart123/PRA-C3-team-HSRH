@@ -73,7 +73,9 @@ class BeheerderController extends Controller
 
     public function destroy(Beheerder $beheerder)
     {
-        if (! Gate::allows('delete-beheerder')) {
+        $current = Auth::guard('beheerder')->user() ?? Auth::user();
+
+        if (! $current || ! ($current->is_super ?? false)) {
             abort(403, 'Toegang geweigerd.');
         }
 

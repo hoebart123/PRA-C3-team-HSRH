@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Models\Message;
@@ -23,15 +22,12 @@ Route::post('/contact', function (Request $request) {
     return redirect()->route('contact')->with('success', 'Bericht verstuurd!');
 })->name('contact.send');
 
-Route::post('/inschrijven/scholen', [RegistrationController::class, 'store'])->name('registrations.store');
-
+// Beheerder routes
 Route::prefix('beheerder')->group(function () {
-    // Login/Logout
     Route::get('login', [BeheerderLoginController::class, 'showLoginForm'])->name('beheerder.login');
     Route::post('login', [BeheerderLoginController::class, 'login'])->name('beheerder.login.submit');
     Route::post('logout', [BeheerderLoginController::class, 'logout'])->name('beheerder.logout');
 
-    // Beschermde beheerder routes
     Route::middleware('auth:beheerder')->group(function () {
         Route::get('dashboard', [BeheerderController::class, 'index'])->name('beheerders.index');
         Route::post('/', [BeheerderController::class, 'store'])->name('beheerders.store');
@@ -40,10 +36,17 @@ Route::prefix('beheerder')->group(function () {
     });
 });
 
+// Gebruiker routes
 Route::middleware('auth')->group(function () {
+    // Profiel
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Inschrijven
+    Route::get('/inschrijven', [RegistrationController::class, 'create'])->name('registrations.create');
+    Route::post('/inschrijven', [RegistrationController::class, 'store'])->name('registrations.store');
+    Route::delete('/inschrijven/{id}', [RegistrationController::class, 'uitschrijven'])->name('inschrijven.delete');
 });
 
 require __DIR__.'/auth.php';

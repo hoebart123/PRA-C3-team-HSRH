@@ -7,6 +7,18 @@ body {
     padding: 0;
 }
 
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4B0082;
+    color: white;
+    border-radius: 5px;
+}
+
+.button:hover {
+    background-color: #5e00b3;
+}
+
 /* Header */
 header {
     background-color: #4B0082; /* donkerpaars */
@@ -110,3 +122,84 @@ footer {
     color: #333;
     margin-top: 40px;
 }
+
+body main {
+    padding: 20px;
+    max-width: 600px;
+    margin: auto;
+}
+
+h1 {
+    text-align: center;
+}
+
+p {
+    margin-bottom: 20px;
+}
+
+@media (max-width: 400px) {
+    .button,
+    .contact-form button {
+        margin-bottom: 12px;
+        text-align: center;
+    }
+
+    header nav a {
+        display: block;
+        margin-left: 0;
+        margin-top: 8px;
+    }
+}
+/* Knopstijl voor links zoals Inschrijven */
+.btn-inschrijven,
+.logout-link {
+    display: inline-block;
+    background-color: #4B0082;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.btn-inschrijven:hover,
+.logout-link:hover {
+    background-color: #6A0DAD;
+}
+/* Uitschrijven knop als klein rond kruisje */
+.remove-team {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background-color: #ff4d4f; /* rood */
+    color: #fff;
+    border: none;
+    padding: 3px 7px;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 0.8em;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.remove-team:hover {
+    background-color: #e03e3e;
+    transform: scale(1.2);
+}
+
+/* Team blokjes eenvoudiger */
+.team-block {
+    padding: 0; /* verwijder extra achtergrond/vak */
+    margin-bottom: 15px;
+    position: relative;
+    border: none; /* geen rand */
+}
+.team-block label,
+.team-block input,
+.team-block select {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+}
+

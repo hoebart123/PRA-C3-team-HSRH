@@ -18,9 +18,12 @@ class RegistrationController extends Controller
         $data = $request->validate([
             'schoolnaam' => 'required|string|max:255',
             'contactpersoon' => 'required|string|max:255',
+            'email' => 'nullable|email', 
             'opmerking' => 'nullable|string',
+            'referee_name' => 'required|string|max:255',  
+            'referee_email' => 'required|email|max:255',   
             'teams.*.naam' => 'required|string|max:255',
-            'teams.*.sport' => 'required|string|max:255',
+            'teams.*.toernooi' => 'required|string|max:255',
             'teams.*.aantal' => 'required|integer|min:1'
         ]);
 
@@ -29,6 +32,8 @@ class RegistrationController extends Controller
             'contactpersoon' => $data['contactpersoon'],
             'email' => auth()->user()->email,
             'opmerking' => $data['opmerking'] ?? null,
+            'referee_name' => $data['referee_name'],       
+            'referee_email' => $data['referee_email'],     
             'teams' => json_encode($data['teams']),
             'approved' => false,
         ]);

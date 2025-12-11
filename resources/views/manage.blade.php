@@ -1,49 +1,70 @@
-@extends('layouts.app')
+@extends('layouts.base')
 
 @section('content')
-<h1>Alle Inschrijvingen</h1>
 
-@foreach($schools as $school)
-    <h2>{{ $school->name }} ({{ $school->city }})</h2>
+<div class="container">
 
-    <table class="table">
+    <h1 class="mb-4">Inschrijvingen beheer</h1>
+
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    <table class="table table-bordered">
         <thead>
             <tr>
-                <th>Team</th>
+                <th>School</th>
+                <th>Teams</th>
                 <th>Status</th>
                 <th>Acties</th>
             </tr>
         </thead>
+
         <tbody>
-        @foreach($school->teams as $team)
+        @foreach($scholen as $school)
             <tr>
-                <td>{{ $team->team_name }}</td>
+                <td>{{ $school->naam }}</td>
+
                 <td>
-                    @if($team->approved)
-                        ✔️ Goedgekeurd
-                    @else
-                        ❌ Niet goedgekeurd
-                    @endif
+                    <ul>
+                        @foreach($school->teams as $team)
+                            <li>{{ $team->naam }} ({{ $team->leden }} leden)</li>
+                        @endforeach
+                    </ul>
                 </td>
-                <td>
-                    @if(!$team->approved)
-                         <form action="{{ route('admin.registrations.approve', $team) }}" method="post" style="display:inline;">
-                            @csrf @method('PUT')
-                            <button class="btn btn-success">Goedkeuren</button>
+
+                <td>{{ ucfirst($school->status) }}</td>
+
+                <td class="d-flex gap-2">
+
+                    {{-- GOEDKEUREN --}}
+                    @if($school->status === 'pending')
+                        <form action="{{ route('admin.scholen.approve', $school) }}" method="POST">
+                            @csrf
+                            @method('PATCH')
+                            <button class="btn btn-success btn-sm">Goedkeuren</button>
                         </form>
                     @endif
 
-                    <a href="{{ route('admin.registrations.edit', $team) }}" class="btn btn-primary">Aanpassen</a>
+                    {{-- AANPASSEN --}}
+                    <a href="{{ route('admin.scholen.edit', $school) }}" class="btn btn-primary btn-sm">
+                        <button class="btn btn-danger btn-sm">Aanpassen</button>
+                    </a>
 
-                    <form action="{{ route('admin.registrations.destroy', $team) }}" method="post" style="display:inline;">
-                        @csrf @method('DELETE')
-                        <button class="btn btn-danger" onclick="return confirm('Weet je het zeker?')">Verwijderen</button>
+                    {{-- VERWIJDEREN --}}
+                    <form action="{{ route('admin.scholen.destroy', $school) }}" method="POST"
+                          onsubmit="return confirm('Weet je zeker dat je wilt verwijderen?')">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-danger btn-sm">Verwijderen</button>
                     </form>
+
                 </td>
             </tr>
         @endforeach
         </tbody>
-    </table>
-@endforeach
 
-@endsection
+    </table>
+
+</div>
+

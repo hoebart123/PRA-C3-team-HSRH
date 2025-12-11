@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\BeheerderController;
 use App\Http\Controllers\BeheerderLoginController;
+use App\Http\Controllers\admin\AdminSchoolController;
 
 Route::get('/', function () {
     return view('home');
@@ -22,6 +23,32 @@ Route::post('/contact', function (Request $request) {
     return redirect()->route('contact')->with('success', 'Bericht verstuurd!');
 })->name('contact.send');
 
+Route::get('/manage', function () {
+    return view('manage');
+})->name('manage');
+
+    Route::resource('/manage', AdminSchoolController::class)
+        ->names('scholen')
+        ->parameters(['inschrijvingen' => 'school']);
+
+
+Route::prefix('admin')->name('admin.')->group(function () {
+
+        Route::get('/inschrijvingen', [AdminSchoolController::class, 'index'])
+            ->name('scholen.index');
+
+        Route::patch('/inschrijvingen/{school}/approve', [AdminSchoolController::class, 'approve'])
+            ->name('scholen.approve');
+
+        Route::get('/inschrijvingen/{school}/edit', [AdminSchoolController::class, 'edit'])
+            ->name('scholen.edit');
+
+        Route::put('/inschrijvingen/{school}', [AdminSchoolController::class, 'update'])
+            ->name('scholen.update');
+
+        Route::delete('/inschrijvingen/{school}', [AdminSchoolController::class, 'destroy'])
+            ->name('scholen.destroy');
+            });
 // Beheerder routes
 Route::prefix('beheerder')->group(function () {
     Route::get('login', [BeheerderLoginController::class, 'showLoginForm'])->name('beheerder.login');

@@ -11,5 +11,4 @@
         Inschrijven
     </a>
 </p>
-/
 @endsection

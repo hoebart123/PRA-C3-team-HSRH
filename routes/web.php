@@ -7,6 +7,9 @@ use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\BeheerderController;
 use App\Http\Controllers\BeheerderLoginController;
 use App\Http\Controllers\admin\AdminSchoolController;
+use App\Http\Controllers\ArchiveController;
+
+
 
 Route::get('/', function () {
     return view('home');
@@ -22,6 +25,8 @@ Route::post('/contact', function (Request $request) {
 
     return redirect()->route('contact')->with('success', 'Bericht verstuurd!');
 })->name('contact.send');
+
+Route::get('/archief', [ArchiveController::class, 'index'])->name('archief.index');
 
 Route::get('/manage', function () {
     return view('manage');

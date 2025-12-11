@@ -1,5 +1,7 @@
-<x-base-layout>
-<img style="width: 75px; margin-left: -300px;" src="{{ asset('img/logofr.png') }}" alt="Foto" class="logo">
+@extends('layouts.base')
+
+@section('content')
+
 <style>
     .admin-page {
         max-width: 1000px;
@@ -60,7 +62,6 @@
 
 
 <div class="admin-page">
-
 
     <h1 class="admin-title">Inschrijvingen beheer</h1>
 
@@ -130,5 +131,4 @@
 
 </div>
 
-</x-base-layout>
-
+@endsection

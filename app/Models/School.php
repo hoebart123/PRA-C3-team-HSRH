@@ -7,9 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class School extends Model
 {
-    protected $fillable = [
-        'naam', 'contactpersoon', 'email', 'status'
-    ];
+ protected $fillable = ['naam', 'contactpersoon', 'email', 'opmerking', 'status', 'is_archived'];
 
     public function teams()
     {

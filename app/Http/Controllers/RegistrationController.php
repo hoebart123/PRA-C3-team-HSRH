@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Registration;
+use App\Models\School;
+use App\Models\Team;
 
 class RegistrationController extends Controller
 {
@@ -14,27 +16,35 @@ class RegistrationController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $data = $request->validate([
-            'schoolnaam' => 'required|string|max:255',
-            'contactpersoon' => 'required|string|max:255',
-            'opmerking' => 'nullable|string',
-            'teams.*.naam' => 'required|string|max:255',
-            'teams.*.sport' => 'required|string|max:255',
-            'teams.*.aantal' => 'required|integer|min:1'
-        ]);
+{
+    $request->validate([
+        'schoolnaam' => 'required',
+        'contactpersoon' => 'required',
+        'email' => 'required|email',
+        'teams' => 'required|array|min:1',
+    ]);
 
-        Registration::create([
-            'schoolnaam' => $data['schoolnaam'],
-            'contactpersoon' => $data['contactpersoon'],
-            'email' => auth()->user()->email,
-            'opmerking' => $data['opmerking'] ?? null,
-            'teams' => json_encode($data['teams']),
-            'approved' => false,
-        ]);
+    // 1) SCHOOL aanmaken
+    $school = School::create([
+        'naam'            => $request->schoolnaam,
+        'contactpersoon'  => $request->contactpersoon,
+        'email'           => $request->email,
+        'opmerking'       => $request->opmerking,
+        'status'          => 'pending', // belangrijke stap!
+    ]);
 
-        return redirect()->route('registrations.create')->with('success', 'Inschrijving ontvangen.');
+    // 2) TEAMS opslaan
+    foreach ($request->teams as $team) {
+        Team::create([
+            'school_id' => $school->id,
+            'naam'      => $team['naam'],
+            'sport'     => $team['sport'],
+            'aantal'    => $team['aantal'],
+        ]);
     }
+
+    return back()->with('success', 'Je inschrijving is verstuurd!');
+}
 
     public function uitschrijven($id)
     {

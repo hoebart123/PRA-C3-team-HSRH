@@ -19,7 +19,7 @@
     <a href="#">Basisschool</a>
     <a href="#">Info</a>
     <a href="{{ route('registrations.create') }}">Inschrijven</a>
-
+    <a href="{{ route('archief.index') }}">Archief</a>
 
     @guest
         <a href="{{ route('login') }}">Log in</a>

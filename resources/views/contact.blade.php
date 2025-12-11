@@ -1,5 +1,5 @@
 <x-base-layout>
-
+<img style="width: 75px; margin-left: -300px;" src="{{ asset('img/logofr.png') }}" alt="Foto" class="logo">
 <h1>Contact</h1>
 
 @if(session('success'))

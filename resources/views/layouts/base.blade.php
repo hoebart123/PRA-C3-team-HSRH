@@ -18,7 +18,7 @@
     <a href="#">Middelbare school</a>
     <a href="#">Basisschool</a>
     <a href="#">Info</a>
-    <a href="{{ route('registrations.create') }}" ">Inschrijven</a>
+    <a href="{{ route('registrations.create') }}">Inschrijven</a>
 
 
     @guest

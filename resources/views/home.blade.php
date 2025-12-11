@@ -1,6 +1,4 @@
-@extends('layouts.base')
-
-@section('content')
+<x-base-layout>
 
 <h1>Welkom bij Stichting Paastoernooien</h1>
 
@@ -11,4 +9,4 @@
         Inschrijven
     </a>
 </p>
-@endsection
+</x-base-layout>

@@ -1,6 +1,4 @@
-@extends('layouts.base')
-
-@section('content')
+<x-base-layout>
 
 <style>
 /* Algemene pagina */
@@ -260,4 +258,4 @@ document.addEventListener('click', function (e) {
 });
 </script>
 
-@endsection
+</x-base-layout>

@@ -1,6 +1,4 @@
-@extends('layouts.base')
-
-@section('content')
+<x-base-layout>
 
 <h1>Contact</h1>
 
@@ -31,4 +29,4 @@
     <button type="submit">Verstuur</button>
 </form>
 
-@endsection
+</x-base-layout>

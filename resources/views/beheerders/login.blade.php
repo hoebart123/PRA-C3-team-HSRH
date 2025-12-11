@@ -1,6 +1,4 @@
-@extends('layouts.base')
-
-@section('content')
+<x-base-layout>
 
 <style>
     form {
@@ -71,4 +69,4 @@
     <button type="submit">Inloggen</button>
 </form>
 
-@endsection
+</x-base-layout>

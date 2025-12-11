@@ -47,7 +47,7 @@
 
 <main>
     {{-- Pagina content komt hier --}}
-    @yield('content')
+    {{ $slot }}
 </main>
 
 <footer>

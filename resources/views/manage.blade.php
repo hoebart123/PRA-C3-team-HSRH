@@ -1,6 +1,4 @@
-@extends('layouts.base')
-
-@section('content')
+<x-base-layout>
 
 <div class="container">
 
@@ -67,4 +65,6 @@
     </table>
 
 </div>
+
+<x-base-layout>
 

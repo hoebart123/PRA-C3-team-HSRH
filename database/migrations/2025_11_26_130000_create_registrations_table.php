@@ -14,12 +14,9 @@ return new class extends Migration
             $table->string('contactpersoon');
             $table->string('email');
             $table->text('opmerking')->nullable();
+            $table->string('referee_name')->nullable();
+            $table->string('referee_email')->nullable();
             $table->json('teams')->nullable();
-
-            // Nieuwe velden voor scheidsrechter
-            $table->string('referee_name');
-            $table->string('referee_email');
-
             $table->boolean('approved')->default(false);
             $table->timestamps();
         });

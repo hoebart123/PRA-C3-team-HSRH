@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Registration;
-use App\Models\School;
-use App\Models\Team;
 
 class RegistrationController extends Controller
 {
@@ -16,35 +14,32 @@ class RegistrationController extends Controller
     }
 
     public function store(Request $request)
-{
-    $request->validate([
-        'schoolnaam' => 'required',
-        'contactpersoon' => 'required',
-        'email' => 'required|email',
-        'teams' => 'required|array|min:1',
-    ]);
-
-    // 1) SCHOOL aanmaken
-    $school = School::create([
-        'naam'            => $request->schoolnaam,
-        'contactpersoon'  => $request->contactpersoon,
-        'email'           => $request->email,
-        'opmerking'       => $request->opmerking,
-        'status'          => 'pending', // belangrijke stap!
-    ]);
-
-    // 2) TEAMS opslaan
-    foreach ($request->teams as $team) {
-        Team::create([
-            'school_id' => $school->id,
-            'naam'      => $team['naam'],
-            'sport'     => $team['sport'],
-            'aantal'    => $team['aantal'],
+    {
+        $data = $request->validate([
+            'schoolnaam' => 'required|string|max:255',
+            'contactpersoon' => 'required|string|max:255',
+            'email' => 'required|email',
+            'opmerking' => 'nullable|string',
+            'referee_name' => 'nullable|string|max:255',
+            'referee_email' => 'nullable|email|max:255',
+            'teams.*.naam' => 'required|string|max:255',
+            'teams.*.toernooi' => 'required|string|max:255',
+            'teams.*.aantal' => 'required|integer|min:1'
         ]);
-    }
 
-    return back()->with('success', 'Je inschrijving is verstuurd!');
-}
+        Registration::create([
+            'schoolnaam'     => $data['schoolnaam'],
+            'contactpersoon' => $data['contactpersoon'],
+            'email'          => $data['email'],
+            'opmerking'      => $data['opmerking'] ?? null,
+            'referee_name'   => $data['referee_name'] ?? null,
+            'referee_email'  => $data['referee_email'] ?? null,
+            'teams'          => json_encode($data['teams']),
+            'approved'       => false,
+        ]);
+
+        return redirect()->route('registrations.create')->with('success', 'Inschrijving ontvangen.');
+    }
 
     public function uitschrijven($id)
     {

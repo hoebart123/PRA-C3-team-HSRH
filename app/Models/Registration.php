@@ -16,9 +16,9 @@ class Registration extends Model
         'contactpersoon',
         'email',
         'opmerking',
-        'teams',    
-        'referee_name',   // toegevoegd
-        'referee_email',  // toegevoegd
+        'referee_name',
+        'referee_email',
+        'teams',
         'approved',
     ];
 

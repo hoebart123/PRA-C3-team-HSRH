@@ -11,13 +11,22 @@ return new class extends Migration {
     {
         Schema::create('schools', function (Blueprint $table) {
             $table->id();
+
             $table->string('naam');
-            $table->string('contactpersoon')->nullable();
-            $table->string('email')->nullable();
+            $table->string('contactpersoon');
+            $table->string('email');
+
+            // Scheidsrechter
+            $table->string('referee_name');
+            $table->string('referee_email');
+
             $table->enum('status', ['pending', 'approved'])->default('pending');
+
             $table->boolean('is_archived')->default(false);
+
             $table->timestamps();
         });
+
     }
 
     public function down(): void

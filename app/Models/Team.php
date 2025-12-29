@@ -7,10 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Team extends Model
 {
-    protected $fillable = ['school_id', 'naam', 'sport', 'aantal'];
+    protected $fillable = [
+        'school_id',
+        'naam',
+        'toernooi',
+        'aantal',
+    ];
 
     public function school()
     {
         return $this->belongsTo(School::class);
     }
 }
+

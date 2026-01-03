@@ -58,6 +58,13 @@
     @csrf
     <h2>Beheerder Login</h2>
 
+
+    @if (session('success'))
+    <div style="color: green; text-align: center; margin-bottom: 10px;">
+        {{ session('success') }}
+    </div>
+    @endif
+
     @if($errors->any())
         <div class="error">{{ $errors->first() }}</div>
     @endif

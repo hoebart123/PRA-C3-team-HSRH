@@ -56,6 +56,10 @@ Route::prefix('beheerder')->group(function () {
     Route::post('logout', [BeheerderLoginController::class, 'logout'])->name('beheerder.logout');
 
     Route::middleware('auth:beheerder')->group(function () {
+        Route::get('profile', [BeheerderController::class, 'editProfile'])
+        ->name('beheerders.profile.edit');
+        Route::patch('profile', [BeheerderController::class, 'updateProfile'])
+        ->name('beheerders.profile.update');
         Route::get('dashboard', [BeheerderController::class, 'index'])->name('beheerders.index');
         Route::post('/', [BeheerderController::class, 'store'])->name('beheerders.store');
         Route::post('{beheerder}/approve', [BeheerderController::class, 'approve'])->name('beheerders.approve');

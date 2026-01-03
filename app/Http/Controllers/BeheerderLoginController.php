@@ -11,7 +11,11 @@ class BeheerderLoginController extends Controller
 {
     public function showLoginForm()
     {
-        return view('beheerders.login'); 
+        if (auth('beheerder')->check()) {
+            return redirect()->route('beheerders.index');
+        }
+
+        return view('beheerders.login');
     }
 
     public function login(Request $request)

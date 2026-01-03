@@ -76,4 +76,8 @@
     <button type="submit">Inloggen</button>
 </form>
 
+<p style="text-align: center;">
+    <a href="{{ route('beheerder.password.request') }}">Wachtwoord vergeten?</a>
+</p>
+
 </x-base-layout>

@@ -86,3 +86,10 @@ Route::get('/beheerder/register', [BeheerderController::class, 'showRegistration
 
 Route::post('/beheerder/register', [BeheerderController::class, 'store'])
     ->name('beheerder.register.submit');
+
+
+Route::get('beheerder/forgot-password', [BeheerderLoginController::class, 'showForgotPasswordForm'])
+    ->name('beheerder.password.request');
+
+Route::post('beheerder/forgot-password', [BeheerderLoginController::class, 'sendTemporaryPassword'])
+    ->name('beheerder.password.email');

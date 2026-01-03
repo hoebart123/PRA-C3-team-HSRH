@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Beheerder;
+use Illuminate\Support\Facades\Mail;
 
 class BeheerderLoginController extends Controller
 {
@@ -54,5 +55,34 @@ class BeheerderLoginController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('beheerder.login');
+    }
+
+        // 1. Formulier tonen
+    public function showForgotPasswordForm()
+    {
+        if (auth('beheerder')->check()) {
+        return redirect()->route('beheerders.index');
+        }
+
+        return view('beheerders.forgot_password');
+    }
+
+    public function sendTemporaryPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:beheerders,email'
+        ]);
+
+        $beheerder = Beheerder::where('email', $request->email)->first();
+
+        $temporaryPassword = 'Welkom123';
+
+        $beheerder->password = Hash::make($temporaryPassword);
+        $beheerder->save();
+
+        Mail::to($beheerder->email)->send(new \App\Mail\BeheerderTemporaryPassword($temporaryPassword)
+    );
+
+        return back()->with('success', 'Er is een tijdelijk wachtwoord naar uw e-mail gestuurd.');
     }
 }

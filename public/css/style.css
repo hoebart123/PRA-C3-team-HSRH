@@ -1,38 +1,30 @@
-/* Algemene pagina */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f9f9f9; /* lichtgrijs voor professioneel uiterlijk */
+    background-color: #f9f9f9;
     color: #333;
     margin: 0;
     padding: 0;
 }
 
-.button {
+button, .btn-inschrijven, .logout-link {
     display: inline-block;
     padding: 10px 20px;
     background-color: #4B0082;
     color: white;
     border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
 }
 
-.button:hover {
-    background-color: #5e00b3;
+button:hover, .btn-inschrijven:hover, .logout-link:hover {
+    background-color: #6A0DAD;
 }
 
-/* Header */
 header {
-    background-color: #4B0082; /* donkerpaars */
+    background-color: #4B0082;
     color: #fff;
     padding: 20px 0;
-}
-
-header .container {
-    max-width: 900px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
 }
 
 header nav a {
@@ -46,14 +38,12 @@ header nav a:hover {
     text-decoration: underline;
 }
 
-/* Container voor main content */
 .container {
     max-width: 900px;
     margin: 0 auto;
     padding: 20px;
 }
 
-/* Contactgegevens */
 .contact-info {
     background-color: #fff;
     border-left: 5px solid #4B0082;
@@ -63,7 +53,6 @@ header nav a:hover {
     box-shadow: 0 3px 6px rgba(0,0,0,0.1);
 }
 
-/* Succesbericht */
 .success-message {
     background-color: #d1e7dd;
     color: #0f5132;
@@ -73,7 +62,6 @@ header nav a:hover {
     border-radius: 5px;
 }
 
-/* Formulier */
 .contact-form {
     background-color: #fff;
     padding: 25px;
@@ -100,7 +88,7 @@ header nav a:hover {
 
 .contact-form button {
     margin-top: 20px;
-    background-color: #4B0082; /* hoofdkleur */
+    background-color: #4B0082;
     color: #fff;
     padding: 12px 25px;
     border: none;
@@ -111,90 +99,16 @@ header nav a:hover {
 }
 
 .contact-form button:hover {
-    background-color: #6A0DAD; /* iets lichtere paars bij hover */
-}
-
-/* Footer */
-footer {
-    text-align: center;
-    padding: 20px;
-    background-color: #e0e0e0; /* lichtgrijs */
-    color: #333;
-    margin-top: 40px;
-}
-
-body main {
-    padding: 20px;
-    max-width: 600px;
-    margin: auto;
-}
-
-h1 {
-    text-align: center;
-}
-
-p {
-    margin-bottom: 20px;
-}
-
-@media (max-width: 400px) {
-    .button,
-    .contact-form button {
-        margin-bottom: 12px;
-        text-align: center;
-    }
-
-    header nav a {
-        display: block;
-        margin-left: 0;
-        margin-top: 8px;
-    }
-}
-/* Knopstijl voor links zoals Inschrijven */
-.btn-inschrijven,
-.logout-link {
-    display: inline-block;
-    background-color: #4B0082;
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-}
-
-.btn-inschrijven:hover,
-.logout-link:hover {
     background-color: #6A0DAD;
 }
-/* Uitschrijven knop als klein rond kruisje */
-.remove-team {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    background-color: #ff4d4f; /* rood */
-    color: #fff;
-    border: none;
-    padding: 3px 7px;
-    border-radius: 50%;
-    font-weight: bold;
-    font-size: 0.8em;
-    cursor: pointer;
-    line-height: 1;
-}
 
-.remove-team:hover {
-    background-color: #e03e3e;
-    transform: scale(1.2);
-}
-
-/* Team blokjes eenvoudiger */
 .team-block {
-    padding: 0; /* verwijder extra achtergrond/vak */
+    padding: 0;
     margin-bottom: 15px;
     position: relative;
-    border: none; /* geen rand */
+    border: none;
 }
+
 .team-block label,
 .team-block input,
 .team-block select {
@@ -203,3 +117,21 @@ p {
     margin-bottom: 10px;
 }
 
+.site-footer {
+    background-color: #4B0082;
+    color: #fff;
+    padding: 30px 20px;
+    text-align: center;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    box-shadow: 0 -3px 6px rgba(0,0,0,0.1);
+}
+
+.site-footer a {
+    color: #FFD700;
+    text-decoration: underline;
+}
+
+.site-footer a:hover {
+    color: #fff;
+}

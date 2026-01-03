@@ -8,7 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Team extends Model
 {
     protected $fillable = [
-        'school_id', 'naam', 'leden'
+        'school_id',
+        'naam',
+        'toernooi',
+        'aantal',
     ];
 
     public function school()
@@ -16,3 +19,4 @@ class Team extends Model
         return $this->belongsTo(School::class);
     }
 }
+

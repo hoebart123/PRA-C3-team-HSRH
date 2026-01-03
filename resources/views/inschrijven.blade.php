@@ -1,9 +1,7 @@
-@extends('layouts.base')
-
-@section('content')
-
+<x-base-layout>
+<img style="width: 75px; margin-left: -300px;" src="{{ asset('img/logofr.png') }}" alt="Foto" class="logo">
 <style>
-/* Algemene pagina */
+/* JE ORIGINELE CSS BLIJFT HIER OOK ALLEMAAL */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f9f9f9;
@@ -16,7 +14,6 @@ h1, h2 {
     text-align: center;
 }
 
-/* Formulier */
 form#inschrijfForm {
     background-color: #fff;
     padding: 25px;
@@ -59,7 +56,6 @@ form#inschrijfForm button:hover {
     background-color: #6A0DAD;
 }
 
-/* Teams */
 .team-block {
     background: #f0f0f0;
     padding: 15px;
@@ -79,7 +75,7 @@ form#inschrijfForm button:hover {
     border-radius: 50%;
     font-weight: bold;
     cursor: pointer;
-    font-size: 0.9em; /* compacte grootte */
+    font-size: 0.9em;
     line-height: 1;
 }
 
@@ -87,7 +83,6 @@ form#inschrijfForm button:hover {
     transform: scale(1.2);
 }
 
-/* Registratie kaarten */
 .registratie-card {
     background-color: #fff;
     padding: 20px;
@@ -103,7 +98,6 @@ form#inschrijfForm button:hover {
     flex: 1;
 }
 
-/* Uitschrijven knop */
 .delete-btn {
     background-color: #ff4d4f;
     color: #fff;
@@ -113,14 +107,13 @@ form#inschrijfForm button:hover {
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    display: inline-block; /* geen vak eromheen */
+    display: inline-block;
 }
 
 .delete-btn:hover {
     background-color: #e03e3e;
 }
 
-/* Alerts */
 .alert {
     padding: 12px;
     margin-bottom: 20px;
@@ -153,6 +146,7 @@ form#inschrijfForm button:hover {
 <form action="{{ route('registrations.store') }}" method="POST" id="inschrijfForm">
     @csrf
 
+    <!-- School info -->
     <div class="form-group">
         <label for="schoolnaam">Schoolnaam</label>
         <input type="text" name="schoolnaam" id="schoolnaam" required>
@@ -168,9 +162,15 @@ form#inschrijfForm button:hover {
         <input type="email" name="email" id="email" required value="{{ auth()->user()->email }}">
     </div>
 
+    <!-- Scheidsrechter info -->
     <div class="form-group">
-        <label for="opmerking">Opmerking (optioneel)</label>
-        <textarea name="opmerking" id="opmerking"></textarea>
+        <label for="referee_name">Naam scheidsrechter</label>
+        <input type="text" name="referee_name" id="referee_name" required>
+    </div>
+
+    <div class="form-group">
+        <label for="referee_email">E-mail scheidsrechter</label>
+        <input type="email" name="referee_email" id="referee_email" required>
     </div>
 
     <h2>Teams</h2>
@@ -179,11 +179,16 @@ form#inschrijfForm button:hover {
             <label>Teamnaam</label>
             <input type="text" name="teams[0][naam]" required>
 
-            <label>Sport</label>
-            <select name="teams[0][sport]" required>
-                <option value="">Selecteer sport</option>
-                <option value="Voetbal">Voetbal</option>
-                <option value="Lijnbal">Lijnbal</option>
+            <label>Toernooi</label>
+            <select name="teams[0][toernooi]" required>
+                <option value="">Selecteer toernooi</option>
+                <option value="voetbal_3_4">Voetbal klas 3/4</option>
+                <option value="voetbal_5_6">Voetbal klas 5/6</option>
+                <option value="voetbal_7_8">Voetbal klas 7/8</option>
+                <option value="voetbal_1_jongens">Voetbal 1e klas jongens/gemengd</option>
+                <option value="voetbal_1_meiden">Voetbal 1e klas meiden</option>
+                <option value="lijnbal_7_8">Lijnbal groep 7/8 meiden</option>
+                <option value="lijnbal_1">Lijnbal 1e klas meiden</option>
             </select>
 
             <label>Aantal leerlingen</label>
@@ -207,9 +212,10 @@ form#inschrijfForm button:hover {
         @foreach($registrations as $reg)
             <div class="registratie-card">
                 <div class="registratie-info">
-                    <strong>{{ $reg->schoolnaam }}</strong> — {{ $reg->contactpersoon }} <br>
+                    <strong>{{ $reg->schoolnaam }}</strong> — Contactpersoon: {{ $reg->contactpersoon }} <br>
+                    Scheidsrechter: {{ $reg->referee_name }} ({{ $reg->referee_email }}) <br>
                     @foreach(json_decode($reg->teams) as $team)
-                        {{ $team->naam }} ({{ $team->sport }}) — {{ $team->aantal }} leerlingen <br>
+                        {{ $team->naam }} ({{ $team->toernooi ?? 'Geen toernooi geselecteerd' }}) — {{ $team->aantal }} leerlingen <br>
                     @endforeach
                 </div>
                 
@@ -236,11 +242,16 @@ document.getElementById('add-team').addEventListener('click', function () {
         <label>Teamnaam</label>
         <input type="text" name="teams[${teamIndex}][naam]" required>
 
-        <label>Sport</label>
-        <select name="teams[${teamIndex}][sport]" required>
-            <option value="">Selecteer sport</option>
-            <option value="Voetbal">Voetbal</option>
-            <option value="Lijnbal">Lijnbal</option>
+        <label>Toernooi</label>
+        <select name="teams[${teamIndex}][toernooi]" required>
+            <option value="">Selecteer toernooi</option>
+            <option value="voetbal_3_4">Voetbal klas 3/4</option>
+            <option value="voetbal_5_6">Voetbal klas 5/6</option>
+            <option value="voetbal_7_8">Voetbal klas 7/8</option>
+            <option value="voetbal_1_jongens">Voetbal 1e klas jongens/gemengd</option>
+            <option value="voetbal_1_meiden">Voetbal 1e klas meiden</option>
+            <option value="lijnbal_7_8">Lijnbal groep 7/8 meiden</option>
+            <option value="lijnbal_1">Lijnbal 1e klas meiden</option>
         </select>
 
         <label>Aantal leerlingen</label>
@@ -260,4 +271,4 @@ document.addEventListener('click', function (e) {
 });
 </script>
 
-@endsection
+</x-base-layout>

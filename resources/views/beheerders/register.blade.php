@@ -1,6 +1,4 @@
-@extends('layouts.base')
-
-@section('content')
+<x-base-layout>
 
 <style>
     form {
@@ -86,4 +84,4 @@
     Na registratie staat je account in afwachting totdat een actieve beheerder deze goedkeurt.
 </p>
 
-@endsection
+</x-base-layout>

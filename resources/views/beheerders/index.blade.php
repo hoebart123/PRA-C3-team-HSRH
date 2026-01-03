@@ -1,6 +1,4 @@
-@extends('layouts.base')
-
-@section('content')
+<x-base-layout>
 
 <style>
     body main {
@@ -114,4 +112,4 @@
     </tbody>
 </table>
 
-@endsection
+</x-base-layout>

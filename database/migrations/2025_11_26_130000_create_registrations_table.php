@@ -14,7 +14,9 @@ return new class extends Migration
             $table->string('contactpersoon');
             $table->string('email');
             $table->text('opmerking')->nullable();
-            $table->json('teams')->nullable(); 
+            $table->string('referee_name')->nullable();
+            $table->string('referee_email')->nullable();
+            $table->json('teams')->nullable();
             $table->boolean('approved')->default(false);
             $table->timestamps();
         });

@@ -11,14 +11,18 @@ return new class extends Migration {
     {
         Schema::create('teams', function (Blueprint $table) {
             $table->id();
+
             $table->foreignId('school_id')
-                  ->constrained('scholen')
-                  ->cascadeOnDelete();
+                ->constrained()
+                ->cascadeOnDelete();
 
             $table->string('naam');
-            $table->integer('leden')->default(0);
+            $table->string('toernooi');
+            $table->unsignedInteger('aantal');
+
             $table->timestamps();
         });
+
     }
 
     public function down(): void

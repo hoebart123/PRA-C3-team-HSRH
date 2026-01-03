@@ -1,6 +1,4 @@
-@extends('layouts.base')
-
-@section('content')
+<x-base-layout>
 
 @if(session('success'))
 <div style="color: green">
@@ -48,4 +46,4 @@
     <button type="submit">Opslaan</button>
 </form>
 
-@endsection
+</x-base-layout>

@@ -28,6 +28,18 @@
                 <a href="{{ route('beheerder.register') }}" class="button-inschrijven">Beheerder registreren</a>
             @endif
 
+            @if(Auth::check())
+                <a href="{{ route('profile.edit') }}">Profiel</a>
+                <a href="{{ route('logout') }}"
+                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    Uitloggen
+                </a>
+
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
+                    @csrf
+                </form>
+            @endif
+
             {{-- Beheerder links als ingelogd --}}
             @if(Auth::guard('beheerder')->check())
                 <a href="{{ route('beheerders.index') }}">Beheerders</a>

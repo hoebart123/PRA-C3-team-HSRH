@@ -20,7 +20,7 @@ public function index()
 
         public function approve(Registration $registration)
     {
-        $registration->update(['status' => 'approved']);
+        $registration->update(['approved' => '1']);
 
         return back()->with('success', 'Inschrijving goedgekeurd');
     }
@@ -54,9 +54,9 @@ public function update(Request $request, Registration $registration)
 
         return back()->with('success', 'Inschrijving verwijderd');
     }
-    public function archive(School $school)
+    public function archive(Registration $registration)
     {
-        $school->update(['is_archived' => true]);
+        $registration->update(['is_archived' => true]);
 
         return back()->with('success', 'Inschrijving gearchiveerd.');
     }

@@ -104,6 +104,8 @@ Route::prefix('beheer/registrations')
 
         Route::delete('{registration}', [AdminRegistrationController::class, 'destroy'])
             ->name('destroy');
+        Route::patch('{registration}/archive', [AdminRegistrationController::class, 'archive'])
+            ->name('archive');
     });
 
         

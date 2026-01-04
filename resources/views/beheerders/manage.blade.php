@@ -141,7 +141,14 @@ h1 {
     @method('DELETE')
     <button class="btn btn-delete">Verwijderen</button>
 </form>
-
+{{-- archieveren --}}
+<form action="{{ route('admin.registrations.archive', $registration) }}"
+      method="POST"
+      onsubmit="return confirm('Weet je zeker dat je deze inschrijving wilt archiveren?')">
+    @csrf
+    @method('PATCH')
+    <button class="btn btn-delete">Archiveren</button>
+</form>
 
         </div>
     </div>

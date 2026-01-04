@@ -19,11 +19,13 @@ class Registration extends Model
         'referee_name',
         'referee_email',
         'teams',
-        'approved',
+        'is_approved',
+        'is_archived',
     ];
 
     protected $casts = [
         'teams' => 'array',
-        'approved' => 'boolean',
+        'is_approved' => 'boolean',
+        'is_archived' => 'boolean',
     ];
 }

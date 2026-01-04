@@ -1,14 +1,14 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use App\Models\registration;
+use App\Models\Registration;
 
 class ArchiveController extends Controller
 {
     public function index()
     {
-        $archivedRegistrations = Registration::with('teams')
-            ->where('is_archived', true)
+        $archivedRegistrations = Registration::where('is_archived', true)
             ->orderBy('updated_at', 'desc')
             ->get();
 

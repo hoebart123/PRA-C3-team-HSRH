@@ -1,12 +1,12 @@
 <x-base-layout>
 
-@section('content')
 <img style="width: 75px; margin-left: -300px;" src="{{ asset('img/logofr.png') }}" alt="Foto" class="logo">
+
 <div class="admin-page">
     <h1 class="admin-title">Archief — Oude deelnemende scholen</h1>
 
-    @if($archivedSchools->isEmpty())
-        <p>Er staan nog geen scholen in het archief.</p>
+    @if($archivedRegistrations->isEmpty())
+        <p>Er staan nog geen inschrijvingen in het archief.</p>
     @else
 
         <table class="admin-table">
@@ -14,24 +14,27 @@
                 <tr>
                     <th>School</th>
                     <th>Teams</th>
-                    <th>Laatste wijziging</th>
+                    <th>Status</th>
                 </tr>
             </thead>
 
             <tbody>
-                @foreach($archivedSchools as $school)
+                @foreach($archivedRegistrations as $registration)
                     <tr>
-                        <td>{{ $school->naam }}</td>
+                        <td>{{ $registration->schoolnaam }}</td>
 
                         <td>
                             <ul>
-                                @foreach($school->teams as $team)
-                                    <li>{{ $team->naam }} ({{ $team->leden }} leden)</li>
+                                @foreach(json_decode($registration->teams) as $team)
+                                    <li>
+                                        {{ $team->naam }}
+                                        ({{ $team->aantal }} leerlingen)
+                                    </li>
                                 @endforeach
                             </ul>
                         </td>
 
-                        
+                        <td>{{ ucfirst($registration->status) }}</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -39,4 +42,5 @@
 
     @endif
 </div>
+
 </x-base-layout>

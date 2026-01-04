@@ -14,9 +14,7 @@
         <nav>
             <a href="{{ route('home') }}">Home</a>
             <a href="{{ route('contact') }}">Contact</a>
-            <a href="#">Middelbare school</a>
-            <a href="#">Basisschool</a>
-            <a href="#">Info</a>
+            <a href="{{ route('informatie') }}">Info</a>
             <a href="{{ route('registrations.create') }}">Inschrijven</a>
             <a href="{{ route('archief.index') }}">Archief</a>
 

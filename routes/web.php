@@ -107,5 +107,8 @@ Route::prefix('beheer/registrations')
         Route::patch('{registration}/archive', [AdminRegistrationController::class, 'archive'])
             ->name('archive');
     });
+Route::get('/informatie', function () {
+    return view('informatie');
+})->name('informatie');
 
         

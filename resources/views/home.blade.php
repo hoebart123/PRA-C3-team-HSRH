@@ -9,4 +9,13 @@
         Inschrijven
     </a>
 </p>
+
+<p>
+    <a href="{{ route('scores') }}" class="btn-scores">
+        Live Scores Bekijken
+    </a>
+    <a href="{{ route('standen') }}" class="btn-standen">
+        Standen Bekijken
+    </a>
+</p>
 </x-base-layout>

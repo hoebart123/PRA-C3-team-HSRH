@@ -15,6 +15,70 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
+Route::get('/standen', function () {
+    // Bereken standen per poule
+    $poules = \App\Models\Game::select('poule')->whereNotNull('poule')->distinct()->pluck('poule');
+    $standen = [];
+
+    foreach($poules as $poule) {
+        $games = \App\Models\Game::with('team1', 'team2')->where('poule', $poule)->whereNotNull('score1')->get();
+        $teamStats = [];
+
+        foreach($games as $game) {
+            $team1Id = $game->team1_id;
+            $team2Id = $game->team2_id;
+
+            if (!isset($teamStats[$team1Id])) {
+                $teamStats[$team1Id] = ['team' => $game->team1, 'punten' => 0, 'gespeeld' => 0, 'gewonnen' => 0, 'gelijk' => 0, 'verloren' => 0, 'doelpunten_voor' => 0, 'doelpunten_tegen' => 0];
+            }
+            if (!isset($teamStats[$team2Id])) {
+                $teamStats[$team2Id] = ['team' => $game->team2, 'punten' => 0, 'gespeeld' => 0, 'gewonnen' => 0, 'gelijk' => 0, 'verloren' => 0, 'doelpunten_voor' => 0, 'doelpunten_tegen' => 0];
+            }
+
+            $teamStats[$team1Id]['gespeeld']++;
+            $teamStats[$team2Id]['gespeeld']++;
+            $teamStats[$team1Id]['doelpunten_voor'] += $game->score1;
+            $teamStats[$team1Id]['doelpunten_tegen'] += $game->score2;
+            $teamStats[$team2Id]['doelpunten_voor'] += $game->score2;
+            $teamStats[$team2Id]['doelpunten_tegen'] += $game->score1;
+
+            if ($game->score1 > $game->score2) {
+                $teamStats[$team1Id]['gewonnen']++;
+                $teamStats[$team1Id]['punten'] += 3;
+                $teamStats[$team2Id]['verloren']++;
+            } elseif ($game->score1 < $game->score2) {
+                $teamStats[$team2Id]['gewonnen']++;
+                $teamStats[$team2Id]['punten'] += 3;
+                $teamStats[$team1Id]['verloren']++;
+            } else {
+                $teamStats[$team1Id]['gelijk']++;
+                $teamStats[$team2Id]['gelijk']++;
+                $teamStats[$team1Id]['punten'] += 1;
+                $teamStats[$team2Id]['punten'] += 1;
+            }
+        }
+
+        // Sorteer op punten, dan doelsaldo
+        usort($teamStats, function($a, $b) {
+            if ($a['punten'] == $b['punten']) {
+                $saldoA = $a['doelpunten_voor'] - $a['doelpunten_tegen'];
+                $saldoB = $b['doelpunten_voor'] - $b['doelpunten_tegen'];
+                return $saldoB <=> $saldoA;
+            }
+            return $b['punten'] <=> $a['punten'];
+        });
+
+        $standen[$poule] = $teamStats;
+    }
+
+    return view('standen', compact('standen'));
+})->name('standen');
+
+Route::get('/scores', function () {
+    $games = \App\Models\Game::with('team1.school', 'team2.school')->whereNotNull('score1')->orderBy('played_at')->get();
+    return view('scores', compact('games'));
+})->name('scores');
+
 Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
@@ -65,6 +129,9 @@ Route::prefix('beheerder')->group(function () {
         Route::post('/', [BeheerderController::class, 'store'])->name('beheerders.store');
         Route::post('{beheerder}/approve', [BeheerderController::class, 'approve'])->name('beheerders.approve');
         Route::delete('{beheerder}', [BeheerderController::class, 'destroy'])->name('beheerders.destroy');
+
+        // Games routes
+        Route::resource('games', \App\Http\Controllers\GameController::class)->names('games');
     });
 });
 

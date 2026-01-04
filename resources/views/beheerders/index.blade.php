@@ -62,6 +62,10 @@
 
 <p>Welkom, {{ auth()->user()->naam }}!</p>
 
+<div class="mb-6">
+    <a href="{{ route('beheerder.games.index') }}" class="btn">Wedstrijden Beheren</a>
+</div>
+
 <h2>Beheerders</h2>
 
 <table>

@@ -28,15 +28,6 @@ Route::post('/contact', function (Request $request) {
 
 Route::get('/archief', [ArchiveController::class, 'index'])->name('archief.index');
 
-Route::get('/manage', function () {
-    return view('manage');
-})->name('manage');
-
-    Route::resource('/manage', AdminSchoolController::class)
-        ->names('scholen')
-        ->parameters(['inschrijvingen' => 'school']);
-
-
 Route::post('/inschrijven', [RegistrationController::class, 'store'])
     ->name('registrations.store');
 
@@ -93,3 +84,9 @@ Route::get('beheerder/forgot-password', [BeheerderLoginController::class, 'showF
 
 Route::post('beheerder/forgot-password', [BeheerderLoginController::class, 'sendTemporaryPassword'])
     ->name('beheerder.password.email');
+
+Route::get('/manage', [AdminSchoolController::class, 'index'])
+    ->name('beheerders.manage');
+
+
+        

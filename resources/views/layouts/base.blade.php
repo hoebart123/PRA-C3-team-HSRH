@@ -32,7 +32,7 @@
             @if(Auth::guard('beheerder')->check())
                 <a href="{{ route('beheerders.index') }}">Beheerders</a>
                 <a href="{{ route('beheerders.profile.edit') }}">Profiel</a>
-
+                <a href="{{ route('beheerders.manage') }}">Inschrijvingen beheer</a>
                 <a href="{{ route('beheerder.logout') }}"
                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     Uitloggen

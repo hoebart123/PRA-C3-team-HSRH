@@ -15,7 +15,7 @@ class AdminSchoolController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('admin.schools.index', compact('scholen'));
+        return view('beheerders.index', compact('scholen'));
     }
 
     public function approve(School $school)
@@ -43,7 +43,7 @@ class AdminSchoolController extends Controller
         );
 
         return redirect()
-            ->route('admin.scholen.index')
+            ->route('beheerders.manage')
             ->with('success', 'Inschrijving aangepast.');
     }
 

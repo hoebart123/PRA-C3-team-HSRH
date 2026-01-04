@@ -60,7 +60,7 @@
 
 <h1>Beheerder Dashboard</h1>
 
-<p>Welkom, {{ auth()->user()->naam }}!</p>
+<p>Welkom, {{ auth()->user()->name }}!</p>
 
 <h2>Beheerders</h2>
 

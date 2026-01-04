@@ -6,7 +6,7 @@
 
     <p>Weet je zeker dat je <strong>{{ $school->naam }}</strong> wilt goedkeuren?</p>
 
-    <form method="POST" action="{{ route('admin.scholen.approve', $school) }}">
+    <form method="POST" action="{{ route('admin.registrations.approve', $school) }}">
         @csrf
         @method('PATCH')
 

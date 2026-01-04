@@ -119,28 +119,29 @@ h1 {
         <div class="actions">
 
             {{-- Goedkeuren --}}
-            @if($registration->status === 'pending')
-                <form action="{{ route('admin.scholen.approve', $registration->id) }}" method="POST">
-                    @csrf
-                    @method('PATCH')
-                    <button class="btn btn-approve">Goedkeuren</button>
-                </form>
-            @endif
+@if($registration->status === 'pending')
+    <form action="{{ route('admin.registrations.approve', $registration) }}" method="POST">
+        @csrf
+        @method('PATCH')
+        <button class="btn btn-approve">Goedkeuren</button>
+    </form>
+@endif
 
-            {{-- Bewerken --}}
-            <a href="{{ route('admin.scholen.edit', $registration->id) }}"
-               class="btn btn-edit">
-                Aanpassen
-            </a>
+{{-- Bewerken --}}
+<a href="{{ route('admin.registrations.edit', $registration) }}"
+   class="btn btn-edit">
+    Aanpassen
+</a>
 
-            {{-- Verwijderen --}}
-            <form action="{{ route('admin.scholen.destroy', $registration->id) }}"
-                  method="POST"
-                  onsubmit="return confirm('Weet je zeker dat je deze inschrijving wilt verwijderen?')">
-                @csrf
-                @method('DELETE')
-                <button class="btn btn-delete">Verwijderen</button>
-            </form>
+{{-- Verwijderen --}}
+<form action="{{ route('admin.registrations.destroy', $registration) }}"
+      method="POST"
+      onsubmit="return confirm('Weet je zeker dat je deze inschrijving wilt verwijderen?')">
+    @csrf
+    @method('DELETE')
+    <button class="btn btn-delete">Verwijderen</button>
+</form>
+
 
         </div>
     </div>

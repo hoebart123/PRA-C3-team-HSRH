@@ -5,18 +5,18 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\School;
 use Illuminate\Http\Request;
+use App\Models\Registration;
 
 class AdminSchoolController extends Controller
 {
-    public function index()
-    {
-        $scholen = School::with('teams')
-            ->where('is_archived', false)
-            ->orderBy('created_at', 'desc')
-            ->get();
 
-        return view('beheerders.index', compact('scholen'));
-    }
+public function index()
+{
+    $registrations = Registration::latest()->get();
+
+    return view('beheerders.manage', compact('registrations'));
+}
+
 
     public function approve(School $school)
     {

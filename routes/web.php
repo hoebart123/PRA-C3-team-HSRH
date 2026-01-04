@@ -85,8 +85,9 @@ Route::get('beheerder/forgot-password', [BeheerderLoginController::class, 'showF
 Route::post('beheerder/forgot-password', [BeheerderLoginController::class, 'sendTemporaryPassword'])
     ->name('beheerder.password.email');
 
-Route::get('/manage', [AdminSchoolController::class, 'manage'])
+Route::get('/manage', [AdminSchoolController::class, 'index'])
     ->name('beheerders.manage');
+
 
 
         

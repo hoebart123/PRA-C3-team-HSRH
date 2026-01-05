@@ -1,32 +1,50 @@
 <x-base-layout>
-<img style="width: 75px; margin-left: -300px;" src="{{ asset('img/logofr.png') }}" alt="Foto" class="logo">
-<h1>Contact</h1>
+    <img style="width: 75px; margin-left: -300px;"
+         src="{{ asset('img/logofr.png') }}"
+         alt="Logo"
+         class="logo">
 
-@if(session('success'))
-    <div class="success-message">{{ session('success') }}</div>
-@endif
+    <h1>Contact</h1>
 
-<div class="contact-info">
-    <h3>Contactgegevens</h3>
-    <p>Algemeen e-mailadres: test@schoolentoernooi.nl</p>
-    <p>Contactpersoon: Test van Test</p>
-    <p>KvK-nummer: 12345678</p>
-</div>
+    @if(session('success'))
+        <div class="success-message">{{ session('success') }}</div>
+    @endif
 
-<p>Heb je nog vragen? Stel ze hier via het contactformulier en wij nemen zo snel mogelijk contact met je op.</p>
+    <div class="contact-info">
+        <h3>Contactgegevens</h3>
 
-<form class="contact-form" action="{{ route('contact.send') }}" method="POST">
-    @csrf
-    <label>Naam:</label>
-    <input type="text" name="name" placeholder="Naam" required>
+        <p>
+            Algemeen e-mailadres:
+            <a href="mailto:{{ config('organisatie.email') }}">
+                {{ config('organisatie.email') }}
+            </a>
+        </p>
 
-    <label>Email:</label>
-    <input type="email" name="email" placeholder="E-mail" required>
+        <p>
+            Contactpersoon: {{ config('organisatie.contactpersoon') }}
+        </p>
 
-    <label>Bericht:</label>
-    <textarea name="message" placeholder="Bericht" required></textarea>
+        <p>
+            KvK-nummer: {{ config('organisatie.kvk') }}
+        </p>
+    </div>
 
-    <button type="submit">Verstuur</button>
-</form>
+    <p>
+        Heb je nog vragen? Stel ze hier via het contactformulier en wij nemen zo snel mogelijk contact met je op.
+    </p>
 
+    <form class="contact-form" action="{{ route('contact.send') }}" method="POST">
+        @csrf
+
+        <label>Naam:</label>
+        <input type="text" name="name" placeholder="Naam" required>
+
+        <label>E-mail:</label>
+        <input type="email" name="email" placeholder="E-mail" required>
+
+        <label>Bericht:</label>
+        <textarea name="message" placeholder="Bericht" required></textarea>
+
+        <button type="submit">Verstuur</button>
+    </form>
 </x-base-layout>

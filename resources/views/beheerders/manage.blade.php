@@ -1,134 +1,160 @@
-@extends('layouts.base')
+<x-base-layout>
 
-@section('content')
+<img style="width: 75px; margin-left: -300px;" src="{{ asset('img/logofr.png') }}" alt="Logo" class="logo">
 
 <style>
-    .admin-page {
-        max-width: 1000px;
-        margin: 40px auto;
-        background: white;
-        padding: 40px;
-        border-radius: 12px;
-        box-shadow: 0 5px 25px rgba(0,0,0,0.08);
-    }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+}
 
-    .admin-title {
-        font-size: 32px;
-        font-weight: 700;
-        text-align: center;
-        margin-bottom: 30px;
-        color: #333;
-    }
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+}
 
-    table.admin-table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 16px;
-    }
+.management-card {
+    background-color: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
 
-    table.admin-table thead {
-        background: #f1f1f1;
-    }
+.management-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-    table.admin-table th,
-    table.admin-table td {
-        padding: 14px 12px;
-        border-bottom: 1px solid #ddd;
-    }
+.management-header h2 {
+    margin: 0;
+    color: #4B0082;
+}
 
-    table.admin-table tr:hover {
-        background: #fafafa;
-    }
+.status {
+    font-weight: bold;
+    text-transform: capitalize;
+}
 
-    .admin-actions {
-        display: flex;
-        gap: 8px;
-    }
+.status.pending { color: #d39e00; }
+.status.approved { color: #198754; }
+.status.archived { color: #6c757d; }
 
-    .btn-sm {
-        padding: 6px 10px;
-        font-size: 14px;
-        border-radius: 6px;
-    }
+.team-list {
+    margin-top: 10px;
+}
 
-    .btn-primary { background: #007bff; color: white; }
-    .btn-success { background: #28a745; color: white; }
-    .btn-danger { background: #dc3545; color: white; }
-    .btn-primary:hover { background: #0069d9; }
-    .btn-success:hover { background: #218838; }
-    .btn-danger:hover { background: #c82333; }
+.team-list li {
+    margin-bottom: 5px;
+}
 
+.actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.btn {
+    padding: 8px 14px;
+    border-radius: 5px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-approve {
+    background-color: #4B0082;
+    color: white;
+}
+
+.btn-edit {
+    background-color: #0d6efd;
+    color: white;
+}
+
+.btn-delete {
+    background-color: #ff4d4f;
+    color: white;
+}
 </style>
 
+<h1>Inschrijvingen beheer</h1>
 
-<div class="admin-page">
+@if(session('success'))
+    <div class="alert success">{{ session('success') }}</div>
+@endif
 
-    <h1 class="admin-title">Inschrijvingen beheer</h1>
+@forelse($registrations as $registration)
+    <div class="management-card">
 
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
+        <div class="management-header">
+            <h2>{{ $registration->schoolnaam }}</h2>
+            <span class="status {{ $registration->status }}">
+                {{ $registration->status }}
+            </span>
+        </div>
 
-    <table class="admin-table">
-        <thead>
-        <tr>
-            <th>School</th>
-            <th>Teams</th>
-            <th>Status</th>
-            <th>Acties</th>
-        </tr>
-        </thead>
+        <p>
+            <strong>Contactpersoon:</strong> {{ $registration->contactpersoon }} <br>
+            <strong>E-mail:</strong> {{ $registration->email }} <br>
+            <strong>Scheidsrechter:</strong>
+            {{ $registration->referee_name }}
+            ({{ $registration->referee_email }})
+        </p>
 
-        <tbody>
+        <ul class="team-list">
+            @foreach(json_decode($registration->teams) as $team)
+                <li>
+                    {{ $team->naam }} —
+                    {{ $team->toernooi ?? 'Geen toernooi' }} —
+                    {{ $team->aantal }} leerlingen
+                </li>
+            @endforeach
+        </ul>
 
-        @foreach($scholen as $school)
-            <tr>
-                <td>{{ $school->naam }}</td>
+        <div class="actions">
 
-                <td>
-                    <ul style="padding-left:18px;">
-                        @foreach($school->teams as $team)
-                            <li>{{ $team->naam }} ({{ $team->leden }} leden)</li>
-                        @endforeach
-                    </ul>
-                </td>
+            {{-- Goedkeuren --}}
+@if($registration->status === 'pending')
+    <form action="{{ route('admin.registrations.approve', $registration) }}" method="POST">
+        @csrf
+        @method('PATCH')
+        <button class="btn btn-approve">Goedkeuren</button>
+    </form>
+@endif
 
-                <td>{{ ucfirst($school->status) }}</td>
+{{-- Bewerken --}}
+<a href="{{ route('admin.registrations.edit', $registration) }}"
+   class="btn btn-edit">
+    Aanpassen
+</a>
 
-                <td>
-                    <div class="admin-actions">
+{{-- Verwijderen --}}
+<form action="{{ route('admin.registrations.destroy', $registration) }}"
+      method="POST"
+      onsubmit="return confirm('Weet je zeker dat je deze inschrijving wilt verwijderen?')">
+    @csrf
+    @method('DELETE')
+    <button class="btn btn-delete">Verwijderen</button>
+</form>
+{{-- archieveren --}}
+<form action="{{ route('admin.registrations.archive', $registration) }}"
+      method="POST"
+      onsubmit="return confirm('Weet je zeker dat je deze inschrijving wilt archiveren?')">
+    @csrf
+    @method('PATCH')
+    <button class="btn btn-delete">Archiveren</button>
+</form>
 
-                        {{-- GOEDKEUREN --}}
-                        @if($school->status === 'pending')
-                            <form method="POST" action="{{ route('admin.scholen.approve', $school) }}">
-                                @csrf
-                                @method('PATCH')
-                                <button class="btn-success btn-sm">Goedkeuren</button>
-                            </form>
-                        @endif
+        </div>
+    </div>
 
-                        {{-- AANPASSEN --}}
-                        <a href="{{ route('admin.scholen.edit', $school) }}" class="btn-primary btn-sm">
-                            Aanpassen
-                        </a>
+@empty
+    <p style="text-align:center;">Geen inschrijvingen gevonden.</p>
+@endforelse
 
-                        {{-- VERWIJDEREN --}}
-                        <form method="POST" action="{{ route('admin.scholen.destroy', $school) }}"
-                              onsubmit="return confirm('Weet je zeker dat je dit wilt verwijderen?')">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn-danger btn-sm">Verwijderen</button>
-                        </form>
-
-                    </div>
-                </td>
-
-            </tr>
-        @endforeach
-
-        </tbody>
-    </table>
-
-</div>
-
-@endsection
+</x-base-layout>

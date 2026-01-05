@@ -25,6 +25,10 @@ class BeheerderController extends Controller
     
     public function showRegistrationForm()
     {
+        if (auth('beheerder')->check()) {
+        return redirect()->route('beheerders.index');
+        }
+
         return view('beheerders.register');
     }
 
@@ -51,7 +55,7 @@ class BeheerderController extends Controller
         Mail::to($admin->email)->send(new BeheerderPendingApproval($beheerder));
     }
 
-    return redirect()->route('beheerders.index')
+    return redirect()->route('beheerder.login')
         ->with('success', 'Nieuwe beheerder is aangemaakt en wacht op goedkeuring.');
 }
 
@@ -88,5 +92,33 @@ class BeheerderController extends Controller
 
         return redirect()->route('beheerders.index')
             ->with('success', 'Beheerder succesvol verwijderd.');
+    }
+    public function editProfile()
+{
+    return view('beheerders.profile', [
+        'beheerder' => auth('beheerder')->user(),
+    ]);
+}
+
+    public function updateProfile(Request $request)
+    {
+        $beheerder = auth('beheerder')->user();
+
+        $validated = $request->validate([
+            'naam' => 'required|string',
+            'school' => 'required|string',
+            'email' => 'required|email|unique:beheerders,email,' . $beheerder->id,
+            'password' => 'nullable|min:8|confirmed',
+        ]);
+
+        if (!empty($validated['password'])) {
+            $validated['password'] = Hash::make($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
+
+        $beheerder->update($validated);
+
+        return back()->with('success', 'Gegevens succesvol bijgewerkt.');
     }
 }

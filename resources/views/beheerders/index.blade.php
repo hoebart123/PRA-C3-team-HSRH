@@ -60,7 +60,7 @@
 
 <h1>Beheerder Dashboard</h1>
 
-<p>Welkom, {{ auth()->user()->naam }}!</p>
+<p>Welkom, {{ auth()->user()->name }}!</p>
 
 <div class="mb-6">
     <a href="{{ route('beheerder.games.index') }}" class="btn">Wedstrijden Beheren</a>
@@ -76,7 +76,9 @@
             <th>School</th>
             <th>Superbeheerder</th>
             <th>Status</th>
-            <th>Acties</th>
+            @if(auth()->user()->is_super)
+                <th>Acties</th>
+            @endif
         </tr>
     </thead>
     <tbody>
@@ -93,19 +95,22 @@
                         <span class="status-pending">In afwachting</span>
                     @endif
                 </td>
-                <td>
-                    @if(!$beheerder->is_active)
-                        <form action="{{ route('beheerders.approve', $beheerder) }}" method="POST" style="display:inline;">
+                @if(auth()->user()->is_super)
+                    <td>
+                        @if(!$beheerder->is_active)
+                            <form action="{{ route('beheerders.approve', $beheerder) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn">Goedkeuren</button>
+                            </form>
+                        @endif
+
+                        <form action="{{ route('beheerders.destroy', $beheerder) }}" method="POST">
                             @csrf
-                            <button type="submit" class="btn">Goedkeuren</button>
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-delete">Verwijderen</button>
                         </form>
-                    @endif
-                    <form action="{{ route('beheerders.destroy', $beheerder) }}" method="POST" style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-delete">Verwijderen</button>
-                    </form>
-                </td>
+                    </td>
+                @endif
             </tr>
         @endforeach
     </tbody>

@@ -6,7 +6,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\BeheerderController;
 use App\Http\Controllers\BeheerderLoginController;
-use App\Http\Controllers\admin\AdminSchoolController;
+use App\Http\Controllers\admin\AdminRegistrationController;
 use App\Http\Controllers\ArchiveController;
 
 
@@ -92,32 +92,17 @@ Route::post('/contact', function (Request $request) {
 
 Route::get('/archief', [ArchiveController::class, 'index'])->name('archief.index');
 
-Route::get('/manage', function () {
-    return view('manage');
-})->name('manage');
+Route::post('/inschrijven', [RegistrationController::class, 'store'])
+    ->name('registrations.store');
 
-    Route::resource('/manage', AdminSchoolController::class)
-        ->names('scholen')
-        ->parameters(['inschrijvingen' => 'school']);
-
-
-Route::prefix('admin')->name('admin.')->group(function () {
-
-        Route::get('/inschrijvingen', [AdminSchoolController::class, 'index'])
-            ->name('scholen.index');
-
-        Route::patch('/inschrijvingen/{school}/approve', [AdminSchoolController::class, 'approve'])
-            ->name('scholen.approve');
-
-        Route::get('/inschrijvingen/{school}/edit', [AdminSchoolController::class, 'edit'])
-            ->name('scholen.edit');
-
-        Route::put('/inschrijvingen/{school}', [AdminSchoolController::class, 'update'])
-            ->name('scholen.update');
-
-        Route::delete('/inschrijvingen/{school}', [AdminSchoolController::class, 'destroy'])
-            ->name('scholen.destroy');
-            });
+Route::prefix('beheer')->name('admin.scholen.')->group(function () {
+    Route::get('/', [AdminRegistrationController::class, 'index'])->name('index');
+    Route::patch('/{registration}/approve', [AdminRegistrationController::class, 'approve'])->name('approve');
+    Route::get('/{registration}/edit', [AdminRegistrationController::class, 'edit'])->name('edit');
+    Route::put('/{registration}', [AdminRegistrationController::class, 'update'])->name('update');
+    Route::delete('/{registration}', [AdminRegistrationController::class, 'destroy'])->name('destroy');
+    Route::patch('/{registration}/archive', [AdminRegistrationController::class, 'archive'])->name('archive');
+});
 // Beheerder routes
 Route::prefix('beheerder')->group(function () {
     Route::get('login', [BeheerderLoginController::class, 'showLoginForm'])->name('beheerder.login');
@@ -125,6 +110,10 @@ Route::prefix('beheerder')->group(function () {
     Route::post('logout', [BeheerderLoginController::class, 'logout'])->name('beheerder.logout');
 
     Route::middleware('auth:beheerder')->group(function () {
+        Route::get('profile', [BeheerderController::class, 'editProfile'])
+        ->name('beheerders.profile.edit');
+        Route::patch('profile', [BeheerderController::class, 'updateProfile'])
+        ->name('beheerders.profile.update');
         Route::get('dashboard', [BeheerderController::class, 'index'])->name('beheerders.index');
         Route::post('/', [BeheerderController::class, 'store'])->name('beheerders.store');
         Route::post('{beheerder}/approve', [BeheerderController::class, 'approve'])->name('beheerders.approve');
@@ -155,3 +144,38 @@ Route::get('/beheerder/register', [BeheerderController::class, 'showRegistration
 
 Route::post('/beheerder/register', [BeheerderController::class, 'store'])
     ->name('beheerder.register.submit');
+
+
+Route::get('beheerder/forgot-password', [BeheerderLoginController::class, 'showForgotPasswordForm'])
+    ->name('beheerder.password.request');
+
+Route::post('beheerder/forgot-password', [BeheerderLoginController::class, 'sendTemporaryPassword'])
+    ->name('beheerder.password.email');
+
+Route::get('/manage', [AdminRegistrationController::class, 'index'])
+    ->name('beheerders.manage');
+
+Route::prefix('beheer/registrations')
+    ->middleware('auth:beheerder')
+    ->name('admin.registrations.')
+    ->group(function () {
+
+        Route::patch('{registration}/approve', [AdminRegistrationController::class, 'approve'])
+            ->name('approve');
+
+        Route::get('{registration}/edit', [AdminRegistrationController::class, 'edit'])
+            ->name('edit');
+
+        Route::put('{registration}', [AdminRegistrationController::class, 'update'])
+            ->name('update');
+
+        Route::delete('{registration}', [AdminRegistrationController::class, 'destroy'])
+            ->name('destroy');
+        Route::patch('{registration}/archive', [AdminRegistrationController::class, 'archive'])
+            ->name('archive');
+    });
+Route::get('/informatie', function () {
+    return view('informatie');
+})->name('informatie');
+
+        

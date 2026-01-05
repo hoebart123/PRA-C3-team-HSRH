@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('referee_email')->nullable();
             $table->json('teams')->nullable();
             $table->boolean('approved')->default(false);
+            $table->boolean('is_archived')->default(false);
             $table->timestamps();
         });
     }

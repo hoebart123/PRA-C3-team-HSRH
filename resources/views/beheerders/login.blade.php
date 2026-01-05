@@ -56,6 +56,13 @@
     @csrf
     <h2>Beheerder Login</h2>
 
+
+    @if (session('success'))
+    <div style="color: green; text-align: center; margin-bottom: 10px;">
+        {{ session('success') }}
+    </div>
+    @endif
+
     @if($errors->any())
         <div class="error">{{ $errors->first() }}</div>
     @endif
@@ -68,5 +75,9 @@
 
     <button type="submit">Inloggen</button>
 </form>
+
+<p style="text-align: center;">
+    <a href="{{ route('beheerder.password.request') }}">Wachtwoord vergeten?</a>
+</p>
 
 </x-base-layout>

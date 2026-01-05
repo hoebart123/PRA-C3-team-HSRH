@@ -1,17 +1,17 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use App\Models\School;
+use App\Models\Registration;
 
 class ArchiveController extends Controller
 {
     public function index()
     {
-        $archivedSchools = School::with('teams')
-            ->where('is_archived', true)
+        $archivedRegistrations = Registration::where('is_archived', true)
             ->orderBy('updated_at', 'desc')
             ->get();
 
-        return view('archief.index', compact('archivedSchools'));
+        return view('archief.index', compact('archivedRegistrations'));
     }
 }

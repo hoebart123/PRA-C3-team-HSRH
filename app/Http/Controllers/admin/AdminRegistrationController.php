@@ -43,7 +43,7 @@ public function update(Request $request, Registration $registration)
     ]);
 
     return redirect()
-        ->route('beheerders.manage')
+        ->route('admin.registrations.index')
         ->with('success', 'Inschrijving bijgewerkt');
 }
 

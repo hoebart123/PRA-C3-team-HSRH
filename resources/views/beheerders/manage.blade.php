@@ -54,6 +54,7 @@ h1 {
     display: flex;
     gap: 10px;
     margin-top: 15px;
+    flex-wrap: wrap;
 }
 
 .btn {
@@ -80,12 +81,19 @@ h1 {
     background-color: #ff4d4f;
     color: white;
 }
+
+.btn-archive {
+    background-color: #6c757d;
+    color: white;
+}
 </style>
 
 <h1>Inschrijvingen beheer</h1>
 
 @if(session('success'))
-    <div class="alert success">{{ session('success') }}</div>
+    <div class="alert success" style="background:#d4edda;color:#155724;padding:10px;margin-bottom:15px;">
+        {{ session('success') }}
+    </div>
 @endif
 
 @forelse($registrations as $registration)
@@ -101,17 +109,14 @@ h1 {
         <p>
             <strong>Contactpersoon:</strong> {{ $registration->contactpersoon }} <br>
             <strong>E-mail:</strong> {{ $registration->email }} <br>
-            <strong>Scheidsrechter:</strong>
-            {{ $registration->referee_name }}
-            ({{ $registration->referee_email }})
+            <strong>Scheidsrechter:</strong> {{ $registration->referee_name ?? '-' }}
+            ({{ $registration->referee_email ?? '-' }})
         </p>
 
         <ul class="team-list">
             @foreach(json_decode($registration->teams) as $team)
                 <li>
-                    {{ $team->naam }} —
-                    {{ $team->toernooi ?? 'Geen toernooi' }} —
-                    {{ $team->aantal }} leerlingen
+                    {{ $team->naam }} — {{ $team->toernooi ?? 'Geen toernooi' }} — {{ $team->aantal }} leerlingen
                 </li>
             @endforeach
         </ul>
@@ -119,36 +124,32 @@ h1 {
         <div class="actions">
 
             {{-- Goedkeuren --}}
-@if($registration->status === 'pending')
-    <form action="{{ route('admin.registrations.approve', $registration) }}" method="POST">
-        @csrf
-        @method('PATCH')
-        <button class="btn btn-approve">Goedkeuren</button>
-    </form>
-@endif
+            @if($registration->status === 'pending')
+                <form action="{{ route('admin.registrations.approve', $registration) }}" method="POST">
+                    @csrf
+                    @method('PATCH')
+                    <button class="btn btn-approve">Goedkeuren</button>
+                </form>
+            @endif
 
-{{-- Bewerken --}}
-<a href="{{ route('admin.registrations.edit', $registration) }}"
-   class="btn btn-edit">
-    Aanpassen
-</a>
+            {{-- Bewerken --}}
+            <a href="{{ route('admin.registrations.edit', $registration) }}" class="btn btn-edit">
+                Aanpassen
+            </a>
 
-{{-- Verwijderen --}}
-<form action="{{ route('admin.registrations.destroy', $registration) }}"
-      method="POST"
-      onsubmit="return confirm('Weet je zeker dat je deze inschrijving wilt verwijderen?')">
-    @csrf
-    @method('DELETE')
-    <button class="btn btn-delete">Verwijderen</button>
-</form>
-{{-- archieveren --}}
-<form action="{{ route('admin.registrations.archive', $registration) }}"
-      method="POST"
-      onsubmit="return confirm('Weet je zeker dat je deze inschrijving wilt archiveren?')">
-    @csrf
-    @method('PATCH')
-    <button class="btn btn-delete">Archiveren</button>
-</form>
+            {{-- Verwijderen --}}
+            <form action="{{ route('admin.registrations.destroy', $registration) }}" method="POST" onsubmit="return confirm('Weet je zeker dat je deze inschrijving wilt verwijderen?')">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-delete">Verwijderen</button>
+            </form>
+
+            {{-- Archiveren --}}
+            <form action="{{ route('admin.registrations.archive', $registration) }}" method="POST" onsubmit="return confirm('Weet je zeker dat je deze inschrijving wilt archiveren?')">
+                @csrf
+                @method('PATCH')
+                <button type="submit" class="btn btn-archive">Archiveren</button>
+            </form>
 
         </div>
     </div>

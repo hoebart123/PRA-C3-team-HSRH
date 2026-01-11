@@ -4,63 +4,70 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Game;
+use App\Models\Tournament;
+use App\Models\Team;
 
 class GameController extends Controller
 {
     public function index()
     {
-        $games = Game::with('team1.school', 'team2.school')->orderBy('played_at')->get();
-        return view('admin.games.index', compact('games'));
+        $tournaments = Tournament::with([
+            'games.team1.school',
+            'games.team2.school'
+        ])->get();
+
+        return view('admin.games.index', compact('tournaments'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function edit($id)
     {
-        //
+        $game = Game::with([
+            'team1.school',
+            'team2.school'
+        ])->findOrFail($id);
+
+        // Haal alle teams op van dit toernooi zodat je kan wijzigen
+        $teams = Team::where('tournament_id', $game->tournament_id)->get();
+
+        return view('admin.games.edit', compact('game', 'teams'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    public function edit(string $id)
-    {
-        $game = Game::with('team1.school', 'team2.school')->findOrFail($id);
-        return view('admin.games.edit', compact('game'));
-    }
-
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
         $request->validate([
-            'score1' => 'required|integer|min:0',
-            'score2' => 'required|integer|min:0',
+            'team1_id'       => 'required|different:team2_id',
+            'team2_id'       => 'required',
+            'poule'          => 'required|string',
+            'veld'           => 'nullable|string',
+            'played_at'      => 'required|date',
+            'scheidsrechter' => 'nullable|string',
+            'score1'         => 'nullable|integer|min:0',
+            'score2'         => 'nullable|integer|min:0',
         ]);
 
         $game = Game::findOrFail($id);
-        $game->update($request->only('score1', 'score2'));
 
-        return redirect()->route('admin.games.index')->with('success', 'Score bijgewerkt!');
+        $game->team1_id       = $request->team1_id;
+        $game->team2_id       = $request->team2_id;
+        $game->poule          = $request->poule;
+        $game->veld           = $request->veld;
+        $game->played_at      = $request->played_at;
+        $game->scheidsrechter = $request->scheidsrechter;
+        $game->score1         = $request->score1;
+        $game->score2         = $request->score2;
+
+        if($game->save()){
+            return redirect()->route('games.index')->with('success', 'Wedstrijd succesvol aangepast!');
+        }
+
+        return back()->with('error', 'Er is iets misgegaan bij het opslaan.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $game = Game::findOrFail($id);
+        $game->delete();
+
+        return redirect()->route('games.index')->with('success', 'Wedstrijd verwijderd!');
     }
 }

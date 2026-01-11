@@ -1,5 +1,6 @@
 <x-base-layout>
 <img style="width: 75px; margin-left: -300px;" src="{{ asset('img/logofr.png') }}" alt="Foto" class="logo">
+
 <style>
 /* JE ORIGINELE CSS BLIJFT HIER OOK ALLEMAAL */
 body {
@@ -149,50 +150,51 @@ form#inschrijfForm button:hover {
     <!-- School info -->
     <div class="form-group">
         <label for="schoolnaam">Schoolnaam</label>
-        <input type="text" name="schoolnaam" id="schoolnaam" required>
+        <input type="text" name="schoolnaam" id="schoolnaam" required value="{{ old('schoolnaam') }}">
     </div>
 
     <div class="form-group">
         <label for="contactpersoon">Contactpersoon</label>
-        <input type="text" name="contactpersoon" id="contactpersoon" required>
+        <input type="text" name="contactpersoon" id="contactpersoon" required value="{{ old('contactpersoon') }}">
     </div>
 
     <div class="form-group">
         <label for="email">E-mail</label>
-        <input type="email" name="email" id="email" required value="{{ auth()->user()->email }}">
+        <input type="email" name="email" id="email" required 
+               value="{{ old('email') ?? auth()->user()?->email }}">
     </div>
 
     <!-- Scheidsrechter info -->
     <div class="form-group">
         <label for="referee_name">Naam scheidsrechter</label>
-        <input type="text" name="referee_name" id="referee_name" required>
+        <input type="text" name="referee_name" id="referee_name" required value="{{ old('referee_name') }}">
     </div>
 
     <div class="form-group">
         <label for="referee_email">E-mail scheidsrechter</label>
-        <input type="email" name="referee_email" id="referee_email" required>
+        <input type="email" name="referee_email" id="referee_email" required value="{{ old('referee_email') }}">
     </div>
 
     <h2>Teams</h2>
     <div id="teams-container">
         <div class="team-block">
             <label>Teamnaam</label>
-            <input type="text" name="teams[0][naam]" required>
+            <input type="text" name="teams[0][naam]" required value="{{ old('teams.0.naam') }}">
 
             <label>Toernooi</label>
             <select name="teams[0][toernooi]" required>
                 <option value="">Selecteer toernooi</option>
-                <option value="voetbal_3_4">Voetbal klas 3/4</option>
-                <option value="voetbal_5_6">Voetbal klas 5/6</option>
-                <option value="voetbal_7_8">Voetbal klas 7/8</option>
-                <option value="voetbal_1_jongens">Voetbal 1e klas jongens/gemengd</option>
-                <option value="voetbal_1_meiden">Voetbal 1e klas meiden</option>
-                <option value="lijnbal_7_8">Lijnbal groep 7/8 meiden</option>
-                <option value="lijnbal_1">Lijnbal 1e klas meiden</option>
+                <option value="voetbal_3_4" {{ old('teams.0.toernooi') == 'voetbal_3_4' ? 'selected' : '' }}>Voetbal klas 3/4</option>
+                <option value="voetbal_5_6" {{ old('teams.0.toernooi') == 'voetbal_5_6' ? 'selected' : '' }}>Voetbal klas 5/6</option>
+                <option value="voetbal_7_8" {{ old('teams.0.toernooi') == 'voetbal_7_8' ? 'selected' : '' }}>Voetbal klas 7/8</option>
+                <option value="voetbal_1_jongens" {{ old('teams.0.toernooi') == 'voetbal_1_jongens' ? 'selected' : '' }}>Voetbal 1e klas jongens/gemengd</option>
+                <option value="voetbal_1_meiden" {{ old('teams.0.toernooi') == 'voetbal_1_meiden' ? 'selected' : '' }}>Voetbal 1e klas meiden</option>
+                <option value="lijnbal_7_8" {{ old('teams.0.toernooi') == 'lijnbal_7_8' ? 'selected' : '' }}>Lijnbal groep 7/8 meiden</option>
+                <option value="lijnbal_1" {{ old('teams.0.toernooi') == 'lijnbal_1' ? 'selected' : '' }}>Lijnbal 1e klas meiden</option>
             </select>
 
             <label>Aantal leerlingen</label>
-            <input type="number" name="teams[0][aantal]" min="1" required>
+            <input type="number" name="teams[0][aantal]" min="1" required value="{{ old('teams.0.aantal') }}">
 
             <button type="button" class="remove-team">✖</button>
         </div>
@@ -205,9 +207,9 @@ form#inschrijfForm button:hover {
 <hr>
 
 <h2>Jouw inschrijvingen</h2>
-@if($registrations->isEmpty())
+@if(isset($registrations) && $registrations->isEmpty())
     <p>Je hebt nog geen inschrijvingen.</p>
-@else
+@elseif(isset($registrations))
     <div class="registraties">
         @foreach($registrations as $reg)
             <div class="registratie-card">

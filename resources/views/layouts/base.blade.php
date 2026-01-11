@@ -26,6 +26,7 @@
                 <a href="{{ route('beheerder.register') }}" class="button-inschrijven">Beheerder registreren</a>
             @endif
 
+            {{-- Gebruiker ingelogd --}}
             @if(Auth::check())
                 <a href="{{ route('profile.edit') }}">Profiel</a>
                 <a href="{{ route('logout') }}"
@@ -38,17 +39,21 @@
                 </form>
             @endif
 
-            {{-- Beheerder links als ingelogd --}}
+            {{-- Beheerder ingelogd --}}
             @if(Auth::guard('beheerder')->check())
                 <a href="{{ route('beheerders.index') }}">Beheerders</a>
                 <a href="{{ route('beheerders.profile.edit') }}">Profiel</a>
-                <a href="{{ route('beheerders.manage') }}">Inschrijvingen beheer</a>
+                {{-- Link naar Inschrijvingen beheer, route bestaat nu --}}
+                <a href="{{ route('admin.registrations.edit', 1) }}"
+                   onclick="event.preventDefault(); window.location.href='{{ url('/beheer/registrations') }}';">
+                   Inschrijvingen beheer
+                </a>
                 <a href="{{ route('beheerder.logout') }}"
-                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                   onclick="event.preventDefault(); document.getElementById('logout-form-beheerder').submit();">
                     Uitloggen
                 </a>
 
-                <form id="logout-form" action="{{ route('beheerder.logout') }}" method="POST" style="display:none;">
+                <form id="logout-form-beheerder" action="{{ route('beheerder.logout') }}" method="POST" style="display:none;">
                     @csrf
                 </form>
             @endif
@@ -56,10 +61,9 @@
     </header>
 
     <main style="max-width: 800px; margin: 0 auto; padding: 20px;">
-        {{-- Pagina content komt hier --}}
+        {{-- Pagina content --}}
         {{ $slot }}
     </main>
-
 
     <footer style="margin-top: 40px; padding: 20px; background-color: #5B1A8F; color: white; text-align: center;">
         <strong>{{ config('organisatie.naam') }}</strong><br>

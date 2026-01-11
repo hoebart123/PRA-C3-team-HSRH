@@ -9,7 +9,13 @@ class RegistrationController extends Controller
 {
     public function create()
     {
-        $registrations = Registration::where('email', auth()->user()->email)->get();
+        // Controleer eerst of een gebruiker is ingelogd
+        $registrations = collect(); // lege collectie als niemand ingelogd is
+
+        if (auth()->check()) {
+            $registrations = Registration::where('email', auth()->user()->email)->get();
+        }
+
         return view('inschrijven', compact('registrations'));
     }
 
@@ -44,10 +50,13 @@ class RegistrationController extends Controller
     public function uitschrijven($id)
     {
         $registration = Registration::findOrFail($id);
-        if ($registration->email === auth()->user()->email) {
+
+        // Alleen verwijderen als de gebruiker ingelogd is en eigenaar is
+        if (auth()->check() && $registration->email === auth()->user()->email) {
             $registration->delete();
             return redirect()->route('registrations.create')->with('success', 'Inschrijving verwijderd.');
         }
+
         return redirect()->route('registrations.create')->with('error', 'Je mag deze inschrijving niet verwijderen.');
     }
 }

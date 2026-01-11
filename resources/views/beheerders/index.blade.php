@@ -63,7 +63,7 @@
 <p>Welkom, {{ auth()->user()->name }}!</p>
 
 <div class="mb-6">
-    <a href="{{ route('beheerder.games.index') }}" class="btn">Wedstrijden Beheren</a>
+    <a href="{{ route('games.index') }}" class="btn">Wedstrijden Beheren</a>
 </div>
 
 <h2>Beheerders</h2>

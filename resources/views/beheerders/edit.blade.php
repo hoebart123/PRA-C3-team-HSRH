@@ -1,121 +1,116 @@
 <x-base-layout>
+<img style="width: 75px; margin-left: -300px;" src="{{ asset('img/logofr.png') }}" alt="Foto" class="logo">
 
-<style>
-.admin-page {
-    max-width: 700px;
-    margin: 40px auto;
-    background: white;
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 5px 25px rgba(0,0,0,0.08);
-}
+<h1>Inschrijving bewerken</h1>
 
-.admin-title {
-    font-size: 28px;
-    font-weight: 700;
-    text-align: center;
-    margin-bottom: 30px;
-    color: #333;
-}
+@if(session('success'))
+    <div class="alert success">{{ session('success') }}</div>
+@endif
 
-.form-group {
-    margin-bottom: 20px;
-}
+@if(session('error'))
+    <div class="alert error">{{ session('error') }}</div>
+@endif
 
-label {
-    font-weight: 600;
-    margin-bottom: 8px;
-    display: block;
-}
+<form action="{{ route('admin.registrations.update', $registration) }}" method="POST" id="inschrijfForm">
+    @csrf
+    @method('PUT')
 
-input[type="text"], select {
-    width: 100%;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-}
+    <!-- School info -->
+    <div class="form-group">
+        <label for="schoolnaam">Schoolnaam</label>
+        <input type="text" name="schoolnaam" id="schoolnaam" required value="{{ old('schoolnaam', $registration->schoolnaam) }}">
+    </div>
 
-.btn-row {
-    margin-top: 20px;
-    display: flex;
-    justify-content: space-between;
-}
+    <div class="form-group">
+        <label for="contactpersoon">Contactpersoon</label>
+        <input type="text" name="contactpersoon" id="contactpersoon" required value="{{ old('contactpersoon', $registration->contactpersoon) }}">
+    </div>
 
-.btn-success {
-    background: #28a745;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-}
+    <div class="form-group">
+        <label for="email">E-mail</label>
+        <input type="email" name="email" id="email" required value="{{ old('email', $registration->email) }}">
+    </div>
 
-.btn-secondary {
-    background: #6c757d;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 6px;
-    text-decoration: none;
-}
+    <!-- Scheidsrechter info -->
+    <div class="form-group">
+        <label for="referee_name">Naam scheidsrechter</label>
+        <input type="text" name="referee_name" id="referee_name" required value="{{ old('referee_name', $registration->referee_name) }}">
+    </div>
 
-.btn-success:hover { background: #218838; }
-.btn-secondary:hover { background: #5a6268; }
-</style>
+    <div class="form-group">
+        <label for="referee_email">E-mail scheidsrechter</label>
+        <input type="email" name="referee_email" id="referee_email" required value="{{ old('referee_email', $registration->referee_email) }}">
+    </div>
 
-<div class="admin-page">
+    <h2>Teams</h2>
+    <div id="teams-container">
+        @foreach(json_decode($registration->teams) as $i => $team)
+        <div class="team-block">
+            <label>Teamnaam</label>
+            <input type="text" name="teams[{{ $i }}][naam]" required value="{{ old("teams.$i.naam", $team->naam) }}">
 
-    <h1 class="admin-title">
-        Inschrijving bewerken: {{ $registration->schoolnaam }}
-    </h1>
-
-    <form action="{{ route('admin.registrations.update', $registration) }}" method="POST">
-        @csrf
-        @method('PUT')
-
-        {{-- SCHOOLNAAM --}}
-        <div class="form-group">
-            <label for="schoolnaam">Schoolnaam</label>
-            <input
-                type="text"
-                id="schoolnaam"
-                name="schoolnaam"
-                value="{{ old('schoolnaam', $registration->schoolnaam) }}"
-                required
-            >
-        </div>
-
-        {{-- STATUS --}}
-        <div class="form-group">
-            <label for="status">Status</label>
-            <select name="status" id="status">
-                <option value="pending" {{ $registration->status === 'pending' ? 'selected' : '' }}>
-                    Pending
-                </option>
-                <option value="approved" {{ $registration->status === 'approved' ? 'selected' : '' }}>
-                    Approved
-                </option>
-                <option value="rejected" {{ $registration->status === 'rejected' ? 'selected' : '' }}>
-                    Rejected
-                </option>
+            <label>Toernooi</label>
+            <select name="teams[{{ $i }}][toernooi]" required>
+                <option value="">Selecteer toernooi</option>
+                <option value="voetbal_3_4" {{ old("teams.$i.toernooi", $team->toernooi) == 'voetbal_3_4' ? 'selected' : '' }}>Voetbal klas 3/4</option>
+                <option value="voetbal_5_6" {{ old("teams.$i.toernooi", $team->toernooi) == 'voetbal_5_6' ? 'selected' : '' }}>Voetbal klas 5/6</option>
+                <option value="voetbal_7_8" {{ old("teams.$i.toernooi", $team->toernooi) == 'voetbal_7_8' ? 'selected' : '' }}>Voetbal klas 7/8</option>
+                <option value="voetbal_1_jongens" {{ old("teams.$i.toernooi", $team->toernooi) == 'voetbal_1_jongens' ? 'selected' : '' }}>Voetbal 1e klas jongens/gemengd</option>
+                <option value="voetbal_1_meiden" {{ old("teams.$i.toernooi", $team->toernooi) == 'voetbal_1_meiden' ? 'selected' : '' }}>Voetbal 1e klas meiden</option>
+                <option value="lijnbal_7_8" {{ old("teams.$i.toernooi", $team->toernooi) == 'lijnbal_7_8' ? 'selected' : '' }}>Lijnbal groep 7/8 meiden</option>
+                <option value="lijnbal_1" {{ old("teams.$i.toernooi", $team->toernooi) == 'lijnbal_1' ? 'selected' : '' }}>Lijnbal 1e klas meiden</option>
             </select>
+
+            <label>Aantal leerlingen</label>
+            <input type="number" name="teams[{{ $i }}][aantal]" min="1" required value="{{ old("teams.$i.aantal", $team->aantal) }}">
+
+            <button type="button" class="remove-team">✖</button>
         </div>
+        @endforeach
+    </div>
 
-        {{-- KNOPPEN --}}
-        <div class="btn-row">
+    <button type="button" id="add-team">+ Team toevoegen</button>
+    <button type="submit">Bijwerken</button>
+</form>
 
-            <a href="{{ route('beheerders.index') }}" class="btn-secondary">
-                Terug
-            </a>
+<!-- Voeg dezelfde JS toe als in create voor dynamisch teams toevoegen/verwijderen -->
+<script>
+let teamsContainer = document.getElementById('teams-container');
+let addTeamBtn = document.getElementById('add-team');
 
-            <button type="submit" class="btn-success">
-                Opslaan
-            </button>
+addTeamBtn.addEventListener('click', function() {
+    let index = teamsContainer.children.length;
+    let template = `
+    <div class="team-block">
+        <label>Teamnaam</label>
+        <input type="text" name="teams[${index}][naam]" required>
 
-        </div>
+        <label>Toernooi</label>
+        <select name="teams[${index}][toernooi]" required>
+            <option value="">Selecteer toernooi</option>
+            <option value="voetbal_3_4">Voetbal klas 3/4</option>
+            <option value="voetbal_5_6">Voetbal klas 5/6</option>
+            <option value="voetbal_7_8">Voetbal klas 7/8</option>
+            <option value="voetbal_1_jongens">Voetbal 1e klas jongens/gemengd</option>
+            <option value="voetbal_1_meiden">Voetbal 1e klas meiden</option>
+            <option value="lijnbal_7_8">Lijnbal groep 7/8 meiden</option>
+            <option value="lijnbal_1">Lijnbal 1e klas meiden</option>
+        </select>
 
-    </form>
+        <label>Aantal leerlingen</label>
+        <input type="number" name="teams[${index}][aantal]" min="1" required>
 
-</div>
+        <button type="button" class="remove-team">✖</button>
+    </div>
+    `;
+    teamsContainer.insertAdjacentHTML('beforeend', template);
+});
 
+// Event delegation voor verwijderen
+teamsContainer.addEventListener('click', function(e) {
+    if(e.target.classList.contains('remove-team')) {
+        e.target.parentElement.remove();
+    }
+});
+</script>
 </x-base-layout>

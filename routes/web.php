@@ -144,13 +144,15 @@ Route::post('beheerder/forgot-password', [BeheerderLoginController::class, 'send
 
 // ------------------ ADMIN REGISTRATIONS ------------------ //
 Route::prefix('beheer/registrations')->middleware('auth:beheerder')->name('admin.registrations.')->group(function() {
-    Route::get('/', [AdminRegistrationController::class, 'index'])->name('index');
+    Route::get('/', [AdminRegistrationController::class, 'index'])->name('index'); // overzicht
+    Route::get('{registration}', [AdminRegistrationController::class, 'show'])->name('show'); // detail
     Route::patch('{registration}/approve', [AdminRegistrationController::class, 'approve'])->name('approve');
     Route::get('{registration}/edit', [AdminRegistrationController::class, 'edit'])->name('edit');
     Route::put('{registration}', [AdminRegistrationController::class, 'update'])->name('update');
     Route::delete('{registration}', [AdminRegistrationController::class, 'destroy'])->name('destroy');
     Route::patch('{registration}/archive', [AdminRegistrationController::class, 'archive'])->name('archive');
 });
+
 
 // ------------------ PROFILE GEBRUIKER ------------------ //
 Route::middleware('auth')->group(function() {

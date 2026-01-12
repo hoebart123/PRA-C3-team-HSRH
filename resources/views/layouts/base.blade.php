@@ -12,13 +12,14 @@
 <body>
     <header>
         <nav>
+            {{-- Algemene links --}}
             <a href="{{ route('home') }}">Home</a>
             <a href="{{ route('contact') }}">Contact</a>
             <a href="{{ route('informatie') }}">Info</a>
             <a href="{{ route('registrations.create') }}">Inschrijven</a>
             <a href="{{ route('archief.index') }}">Archief</a>
 
-            {{-- Inlog/registratie links voor gasten --}}
+            {{-- Gasten (niet ingelogd) --}}
             @if(!Auth::check() && !Auth::guard('beheerder')->check())
                 <a href="{{ route('login') }}">Log in</a>
                 <a href="{{ route('register') }}">Registreer</a>
@@ -26,8 +27,8 @@
                 <a href="{{ route('beheerder.register') }}" class="button-inschrijven">Beheerder registreren</a>
             @endif
 
-            {{-- Gebruiker ingelogd --}}
-            @if(Auth::check())
+            {{-- Ingelogde gebruiker (niet beheerder) --}}
+            @if(Auth::check() && !Auth::guard('beheerder')->check())
                 <a href="{{ route('profile.edit') }}">Profiel</a>
                 <a href="{{ route('logout') }}"
                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -39,15 +40,11 @@
                 </form>
             @endif
 
-            {{-- Beheerder ingelogd --}}
+            {{-- Ingelogde beheerder --}}
             @if(Auth::guard('beheerder')->check())
                 <a href="{{ route('beheerders.index') }}">Beheerders</a>
                 <a href="{{ route('beheerders.profile.edit') }}">Profiel</a>
-                {{-- Link naar Inschrijvingen beheer, route bestaat nu --}}
-                <a href="{{ route('admin.registrations.edit', 1) }}"
-                   onclick="event.preventDefault(); window.location.href='{{ url('/beheer/registrations') }}';">
-                   Inschrijvingen beheer
-                </a>
+                <a href="{{ route('admin.registrations.index') }}">Inschrijvingen beheer</a>
                 <a href="{{ route('beheerder.logout') }}"
                    onclick="event.preventDefault(); document.getElementById('logout-form-beheerder').submit();">
                     Uitloggen

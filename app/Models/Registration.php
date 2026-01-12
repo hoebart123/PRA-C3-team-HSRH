@@ -19,7 +19,7 @@ class Registration extends Model
         'referee_name',
         'referee_email',
         'teams',
-        'is_approved',
+        'status',
         'is_archived',
     ];
 

@@ -22,7 +22,7 @@ public function index()
 
         public function approve(Registration $registration)
     {
-        $registration->update(['approved' => '1']);
+        $registration->update(['status' => 1]); // 1 = approved
 
         return back()->with('success', 'Inschrijving goedgekeurd');
     }
@@ -34,14 +34,39 @@ public function index()
 
 public function update(Request $request, Registration $registration)
 {
+    // Validatie
     $request->validate([
         'schoolnaam' => 'required|string|max:255',
-        'status' => 'required|in:pending,approved,rejected',
+        'contactpersoon' => 'required|string|max:255',
+        'email' => 'required|email|max:255',
+        'referee_name' => 'required|string|max:255',
+        'referee_email' => 'required|email|max:255',
+        'teams' => 'required|array|min:1',
+        'teams.*.naam' => 'required|string|max:255',
+        'teams.*.toernooi' => 'required|string|max:255',
+        'teams.*.aantal' => 'required|integer|min:1',
+        'status' => 'nullable|in:0,1,2', // 0=pending,1=approved,2=rejected
     ]);
 
+    // Teams opslaan als JSON
+    $teams = collect($request->teams)->map(function($team){
+        return [
+            'naam' => $team['naam'],
+            'toernooi' => $team['toernooi'],
+            'aantal' => (int)$team['aantal'],
+        ];
+    });
+
+    // Update registratie
     $registration->update([
         'schoolnaam' => $request->schoolnaam,
-        'status' => $request->status,
+        'contactpersoon' => $request->contactpersoon,
+        'email' => $request->email,
+        'referee_name' => $request->referee_name,
+        'referee_email' => $request->referee_email,
+        'teams' => $teams->toJson(), // teams als JSON opslaan
+        // Alleen status updaten als deze meegegeven is (anders behouden)
+        'status' => $request->status ?? $registration->status,
     ]);
     Mail::to($registration->email)->send(new WijzigingNotificatie($registration, 'bijgewerkt'));
 
@@ -49,6 +74,7 @@ public function update(Request $request, Registration $registration)
         ->route('admin.registrations.index')
         ->with('success', 'Inschrijving bijgewerkt');
 }
+
 
 
     public function destroy(Registration $registration)

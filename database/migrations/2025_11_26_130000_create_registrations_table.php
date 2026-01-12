@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('referee_name')->nullable();
             $table->string('referee_email')->nullable();
             $table->json('teams')->nullable();
-            $table->boolean('approved')->default(false);
+            $table->integer('status')->default(0); // 0 = pending, 1 = approved, 2 = rejected
             $table->boolean('is_archived')->default(false);
             $table->timestamps();
         });

@@ -12,11 +12,15 @@ return new class extends Migration
     public function up(): void
 {
     if (!Schema::hasTable('schools')) {
-        Schema::create('schools', function (Blueprint $table) {
-            $table->id();
-            $table->string('naam');
-            $table->timestamps();
-        });
+Schema::create('schools', function (Blueprint $table) {
+    $table->id();
+    $table->string('naam');
+    $table->string('contactpersoon');
+    $table->string('email');
+    $table->string('status');
+    $table->timestamps();
+});
+
     }
 
 

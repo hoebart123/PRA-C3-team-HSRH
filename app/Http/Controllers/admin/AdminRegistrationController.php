@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\School;
 use Illuminate\Http\Request;
 use App\Models\Registration;
+use App\Mail\WijzigingNotificatie;
+use Illuminate\Support\Facades\Mail;
 
 class AdminRegistrationController extends Controller
 {
@@ -41,9 +43,10 @@ public function update(Request $request, Registration $registration)
         'schoolnaam' => $request->schoolnaam,
         'status' => $request->status,
     ]);
+    Mail::to($registration->email)->send(new WijzigingNotificatie($registration, 'bijgewerkt'));
 
     return redirect()
-        ->route('beheerders.manage')
+        ->route('admin.registrations.index')
         ->with('success', 'Inschrijving bijgewerkt');
 }
 

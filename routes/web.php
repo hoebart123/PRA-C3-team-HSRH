@@ -144,6 +144,7 @@ Route::post('beheerder/forgot-password', [BeheerderLoginController::class, 'send
 
 // ------------------ ADMIN REGISTRATIONS ------------------ //
 Route::prefix('beheer/registrations')->middleware('auth:beheerder')->name('admin.registrations.')->group(function() {
+    Route::get('/', [AdminRegistrationController::class, 'index'])->name('index');
     Route::patch('{registration}/approve', [AdminRegistrationController::class, 'approve'])->name('approve');
     Route::get('{registration}/edit', [AdminRegistrationController::class, 'edit'])->name('edit');
     Route::put('{registration}', [AdminRegistrationController::class, 'update'])->name('update');

@@ -124,7 +124,7 @@ h1 {
         <div class="actions">
 
             {{-- Goedkeuren --}}
-            @if($registration->status === 'pending')
+            @if($registration->status === 0) {{-- Alleen tonen als status 'pending' is --}}
                 <form action="{{ route('admin.registrations.approve', $registration) }}" method="POST">
                     @csrf
                     @method('PATCH')

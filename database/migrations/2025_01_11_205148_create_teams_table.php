@@ -19,6 +19,7 @@ return new class extends Migration {
             $table->string('naam');
             $table->string('toernooi');
             $table->unsignedInteger('aantal');
+            
 
             $table->timestamps();
         });

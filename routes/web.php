@@ -14,7 +14,7 @@ use App\Http\Controllers\GameController;
 
 // ------------------ HOME / STATIC PAGES ------------------ //
 Route::get('/', fn() => view('home'))->name('home');
-Route::get('/informatie', fn() => view('informatie'))->name('informatie');
+Route::get('/informatie/{age_group?}', fn($age_group = null) => view('informatie', compact('age_group')))->name('informatie');
 Route::get('/contact', fn() => view('contact'))->name('contact');
 
 Route::post('/contact', function(Request $request){

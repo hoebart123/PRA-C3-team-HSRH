@@ -41,33 +41,126 @@
 
     <h1>Informatie Paastoernooi</h1>
 
-    <p>
-        Het Paastoernooi is een sportieve en gezellige dag voor basisscholen en middelbare scholen.
-        Fair play, plezier en sportiviteit staan centraal.
-    </p>
-
-    <div class="highlight">
-        <strong>Let op:</strong> Deelname betekent akkoord gaan met onderstaande regels.
+    <div style="margin-bottom: 20px;">
+        <label for="age_group">Selecteer leeftijdsgroep:</label>
+        <select id="age_group" onchange="changeAgeGroup(this.value)">
+            <option value="placeholder">-- Kies een optie --</option>
+            <option value="algemeen" {{ $age_group == 'algemeen' ? 'selected' : '' }}>Algemeen</option>
+            <option value="groep34" {{ $age_group == 'groep34' ? 'selected' : '' }}>Groep 3/4</option>
+            <option value="groep56" {{ $age_group == 'groep56' ? 'selected' : '' }}>Groep 5/6</option>
+            <option value="groep78" {{ $age_group == 'groep78' ? 'selected' : '' }}>Groep 7/8</option>
+            <option value="middelbaar" {{ $age_group == 'middelbaar' ? 'selected' : '' }}>Middelbare school</option>
+        </select>
     </div>
 
-    <h2>⚽ Voetbal – Algemene regels</h2>
-    <ul>
-        <li>Teams bestaan uit maximaal 7 spelers (6 veldspelers + 1 keeper).</li>
-        <li>Wedstrijden duren 2 × 10 minuten.</li>
-        <li>Wisselen mag onbeperkt.</li>
-        <li>Geen slidings toegestaan.</li>
-        <li>De scheidsrechter heeft altijd het laatste woord.</li>
-        <li>Bij onsportief gedrag kan een speler of team worden uitgesloten.</li>
-    </ul>
+    <script>
+    function changeAgeGroup(ageGroup) {
+        window.location.href = '{{ route("informatie", ":age") }}'.replace(':age', ageGroup);
+    }
+    </script>
 
-    <h2>🏐 Lijnbal – Algemene regels</h2>
-    <ul>
-        <li>Teams bestaan uit maximaal 8 spelers.</li>
-        <li>De bal mag niet worden vastgehouden of gelopen.</li>
-        <li>De bal moet over de lijn van de tegenstander worden gespeeld.</li>
-        <li>Fysiek contact is niet toegestaan.</li>
-        <li>Na een punt serveert het scorende team.</li>
-    </ul>
+    @if($age_group == 'algemeen')
+        <h2>⚽ Voetbal – Algemene regels</h2>
+        <ul>
+            <li>Teams bestaan uit maximaal 7 spelers (6 veldspelers + 1 keeper).</li>
+            <li>Wedstrijden duren 2 × 10 minuten.</li>
+            <li>Wisselen mag onbeperkt.</li>
+            <li>Geen slidings toegestaan.</li>
+            <li>De scheidsrechter heeft altijd het laatste woord.</li>
+            <li>Bij onsportief gedrag kan een speler of team worden uitgesloten.</li>
+        </ul>
+
+        <h2>🏐 Lijnbal – Algemene regels</h2>
+        <ul>
+            <li>Teams bestaan uit maximaal 8 spelers.</li>
+            <li>De bal mag niet worden vastgehouden of gelopen.</li>
+            <li>De bal moet over de lijn van de tegenstander worden gespeeld.</li>
+            <li>Fysiek contact is niet toegestaan.</li>
+            <li>Na een punt serveert het scorende team.</li>
+        </ul>
+    @elseif($age_group == 'groep34')
+        <h2>⚽ Voetbal – Groep 3/4</h2>
+        <ul>
+            <li>Teams bestaan uit 8 spelers.</li>
+            <li>Wedstrijden duren 15 minuten.</li>
+            <li>Wisselen mag onbeperkt.</li>
+            <li>Geen slidings toegestaan.</li>
+            <li>De scheidsrechter heeft altijd het laatste woord.</li>
+            <li>Bij onsportief gedrag kan een speler of team worden uitgesloten.</li>
+        </ul>
+
+        <h2>🏐 Lijnbal – Groep 3/4</h2>
+        <ul>
+            <li>Teams bestaan uit 8 spelers.</li>
+            <li>Wedstrijden duren 10 minuten.</li>
+            <li>De bal mag niet worden vastgehouden of gelopen.</li>
+            <li>De bal moet over de lijn van de tegenstander worden gespeeld.</li>
+            <li>Fysiek contact is niet toegestaan.</li>
+            <li>Na een punt serveert het scorende team.</li>
+        </ul>
+    @elseif($age_group == 'groep56')
+        <h2>⚽ Voetbal – Groep 5/6</h2>
+        <ul>
+            <li>Teams bestaan uit 10 spelers.</li>
+            <li>Wedstrijden duren 15 minuten.</li>
+            <li>Wisselen mag onbeperkt.</li>
+            <li>Geen slidings toegestaan.</li>
+            <li>De scheidsrechter heeft altijd het laatste woord.</li>
+            <li>Bij onsportief gedrag kan een speler of team worden uitgesloten.</li>
+        </ul>
+
+        <h2>🏐 Lijnbal – Groep 5/6</h2>
+        <ul>
+            <li>Teams bestaan uit 10 spelers.</li>
+            <li>Wedstrijden duren 10 minuten.</li>
+            <li>De bal mag niet worden vastgehouden of gelopen.</li>
+            <li>De bal moet over de lijn van de tegenstander worden gespeeld.</li>
+            <li>Fysiek contact is niet toegestaan.</li>
+            <li>Na een punt serveert het scorende team.</li>
+        </ul>
+    @elseif($age_group == 'groep78')
+        <h2>⚽ Voetbal – Groep 7/8</h2>
+        <ul>
+            <li>Teams bestaan uit 10 spelers.</li>
+            <li>Wedstrijden duren 15 minuten.</li>
+            <li>Wisselen mag onbeperkt.</li>
+            <li>Geen slidings toegestaan.</li>
+            <li>De scheidsrechter heeft altijd het laatste woord.</li>
+            <li>Bij onsportief gedrag kan een speler of team worden uitgesloten.</li>
+        </ul>
+
+        <h2>🏐 Lijnbal – Groep 7/8</h2>
+        <ul>
+            <li>Teams bestaan uit 10 spelers.</li>
+            <li>Wedstrijden duren 10 minuten.</li>
+            <li>De bal mag niet worden vastgehouden of gelopen.</li>
+            <li>De bal moet over de lijn van de tegenstander worden gespeeld.</li>
+            <li>Fysiek contact is niet toegestaan.</li>
+            <li>Na een punt serveert het scorende team.</li>
+        </ul>
+    @elseif($age_group == 'middelbaar')
+        <h2>⚽ Voetbal – Middelbare school</h2>
+        <ul>
+            <li>Jongens: Teams bestaan uit 11 spelers.</li>
+            <li>Meisjes: Teams bestaan uit 10 spelers.</li>
+            <li>Wedstrijden duren 15 minuten.</li>
+            <li>Wisselen mag onbeperkt.</li>
+            <li>Geen slidings toegestaan.</li>
+            <li>De scheidsrechter heeft altijd het laatste woord.</li>
+            <li>Bij onsportief gedrag kan een speler of team worden uitgesloten.</li>
+        </ul>
+
+        <h2>🏐 Lijnbal – Middelbare school</h2>
+        <ul>
+            <li>Jongens: Teams bestaan uit 11 spelers.</li>
+            <li>Meisjes: Teams bestaan uit 10 spelers.</li>
+            <li>Wedstrijden duren 10 minuten.</li>
+            <li>De bal mag niet worden vastgehouden of gelopen.</li>
+            <li>De bal moet over de lijn van de tegenstander worden gespeeld.</li>
+            <li>Fysiek contact is niet toegestaan.</li>
+            <li>Na een punt serveert het scorende team.</li>
+        </ul>
+    @endif
 
     <h2>👕 Kleding & materiaal</h2>
     <ul>
